@@ -120,6 +120,18 @@ Don't worry about finding where OpenCode stored its configuration:
 
 ---
 
+### Step 5: Active & Connected in OpenCode
+
+Once saved, every provider and model immediately reflects inside OpenCode's native **Connected providers** interface:
+
+* **Custom Relays & Routers:** Effortlessly manage endpoints like `TokenRouter`, `AiHubMix`, `AgentRouter`, `NaraRouter`, `APIKEY.FUN`, and OpenAI-compatible relays.
+* **Instant Model Availability:** All configured models show up ready for prompt sessions and coding workflows in OpenCode.
+* **Zero Syntax Errors:** OpenCode reads the clean, schema-validated `.jsonc` file without startup failures.
+
+![OpenCode Connected Providers](site/assets/opencode-connected-providers.png)
+
+---
+
 ## 🏗️ Technical Architecture: How It Works
 
 The application is engineered with safety as its primary constraint. Here is the operational workflow:
