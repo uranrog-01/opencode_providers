@@ -25,7 +25,7 @@
 <br />
 
 <p align="center">
-  <img src="site/assets/app-window.png" alt="OpenCode Providers Tool Interface" width="860" />
+  <img src="site/assets/apptool_main.jpg" alt="OpenCode Providers Tool Interface" width="860" />
 </p>
 
 ---
