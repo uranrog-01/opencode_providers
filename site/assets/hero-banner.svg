@@ -1,0 +1,103 @@
+<svg width="100%" height="auto" viewBox="0 0 900 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Background Gradient -->
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="900" y2="240" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0c0c0e"/>
+      <stop offset="50%" stop-color="#121216"/>
+      <stop offset="100%" stop-color="#0c0c0e"/>
+    </linearGradient>
+
+    <!-- Border Glow Gradient -->
+    <linearGradient id="borderGrad" x1="0" y1="0" x2="900" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#27272a" stop-opacity="0.3"/>
+      <stop offset="30%" stop-color="#10b981" stop-opacity="0.8"/>
+      <stop offset="70%" stop-color="#06b6d4" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#27272a" stop-opacity="0.3"/>
+    </linearGradient>
+
+    <!-- Card Background Gradient -->
+    <linearGradient id="cardBg" x1="0" y1="0" x2="0" y2="1" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#18181b" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#111113" stop-opacity="0.9"/>
+    </linearGradient>
+
+    <!-- Subtle Dot Pattern -->
+    <pattern id="dotPattern" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1" fill="#27272a" fill-opacity="0.4"/>
+    </pattern>
+
+    <!-- Badge Glow -->
+    <linearGradient id="badgeGlow" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#10b981" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#06b6d4" stop-opacity="0.2"/>
+    </linearGradient>
+  </defs>
+
+  <style>
+    .title { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif; font-size: 26px; font-weight: 800; fill: #ffffff; letter-spacing: -0.5px; }
+    .subtitle { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif; font-size: 13px; font-weight: 500; fill: #a1a1aa; }
+    .badge-text { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 11px; font-weight: 600; fill: #10b981; }
+    .card-title { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif; font-size: 12px; font-weight: 700; fill: #f4f4f5; }
+    .card-desc { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif; font-size: 11px; font-weight: 400; fill: #71717a; }
+  </style>
+
+  <!-- Container Frame -->
+  <rect x="1" y="1" width="898" height="238" rx="16" fill="url(#bgGrad)"/>
+  <rect x="1" y="1" width="898" height="238" rx="16" fill="url(#dotPattern)"/>
+  <rect x="1" y="1" width="898" height="238" rx="16" stroke="url(#borderGrad)" stroke-width="1.5"/>
+
+  <!-- Top Accent Glow Line -->
+  <path d="M 120 1 L 780 1" stroke="url(#borderGrad)" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- Logo Icon Container -->
+  <rect x="40" y="32" width="56" height="56" rx="12" fill="#18181b" stroke="#27272a" stroke-width="1"/>
+  <!-- Logo Shapes -->
+  <g transform="translate(48, 40)">
+    <path d="M12 8 L24 20 L12 32" stroke="#ffffff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="28" cy="28" r="4" fill="#3b82f6"/>
+    <path d="M26 28 L27.5 29.5 L30 26.5" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+
+  <!-- Pill Tag -->
+  <rect x="112" y="32" width="130" height="20" rx="10" fill="url(#badgeGlow)" stroke="#10b981" stroke-opacity="0.4" stroke-width="1"/>
+  <circle cx="122" cy="42" r="3" fill="#10b981"/>
+  <text x="132" y="46" class="badge-text">OPEN SOURCE GUI</text>
+
+  <!-- Title & Subtitle -->
+  <text x="112" y="74" class="title">OpenCode Providers Tool</text>
+  <text x="112" y="94" class="subtitle">The visual provider &amp; model manager for OpenCode — edit models in-place with zero disconnects.</text>
+
+  <!-- 3 Mini Feature Cards -->
+  <!-- Card 1 -->
+  <g transform="translate(40, 124)">
+    <rect width="254" height="84" rx="10" fill="url(#cardBg)" stroke="#27272a" stroke-width="1"/>
+    <!-- Icon Circle -->
+    <rect x="14" y="14" width="28" height="28" rx="6" fill="#10b981" fill-opacity="0.1" stroke="#10b981" stroke-opacity="0.3"/>
+    <path d="M23 28 L33 28 M28 23 L28 33" stroke="#10b981" stroke-width="1.8" stroke-linecap="round"/>
+    <text x="50" y="27" class="card-title">In-Place Editing</text>
+    <text x="50" y="42" class="card-desc">Add, edit, or prune models without</text>
+    <text x="50" y="56" class="card-desc">disconnecting existing providers.</text>
+  </g>
+
+  <!-- Card 2 -->
+  <g transform="translate(322, 124)">
+    <rect width="256" height="84" rx="10" fill="url(#cardBg)" stroke="#27272a" stroke-width="1"/>
+    <!-- Icon Circle -->
+    <rect x="14" y="14" width="28" height="28" rx="6" fill="#06b6d4" fill-opacity="0.1" stroke="#06b6d4" stroke-opacity="0.3"/>
+    <path d="M22 28 L27 33 L34 23" stroke="#06b6d4" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="50" y="27" class="card-title">Smart Add /models</text>
+    <text x="50" y="42" class="card-desc">1-click live catalog query to discover</text>
+    <text x="50" y="56" class="card-desc">and batch-import all remote models.</text>
+  </g>
+
+  <!-- Card 3 -->
+  <g transform="translate(606, 124)">
+    <rect width="254" height="84" rx="10" fill="url(#cardBg)" stroke="#27272a" stroke-width="1"/>
+    <!-- Icon Circle -->
+    <rect x="14" y="14" width="28" height="28" rx="6" fill="#8b5cf6" fill-opacity="0.1" stroke="#8b5cf6" stroke-opacity="0.3"/>
+    <path d="M24 32 C24 26 32 26 32 24 C32 22 30 21 28 21 C26 21 25 22 24 23 M28 35 L28.01 35" stroke="#8b5cf6" stroke-width="1.8" stroke-linecap="round"/>
+    <text x="50" y="27" class="card-title">Auto Token Limits</text>
+    <text x="50" y="42" class="card-desc">models.dev auto-fills exact context</text>
+    <text x="50" y="56" class="card-desc">and output limits safely.</text>
+  </g>
+</svg>
