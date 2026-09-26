@@ -9,26 +9,16 @@
   <p>Add, edit, or remove models on existing providers in-place — <em>without ever disconnecting them</em>.</p>
 
   <p>
-    <a href="https://github.com/uranrog-01/opencode_providers/releases/latest"><img alt="Latest Release" src="https://img.shields.io/github/v/release/uranrog-01/opencode_providers?style=for-the-badge&color=10b981&labelColor=18181b" /></a>
-    <a href="https://github.com/uranrog-01/opencode_providers/releases"><img alt="Windows 10 / 11" src="https://img.shields.io/badge/Platform-Windows%2010%20%7C%2011-0078d4?style=for-the-badge&logo=windows11&logoColor=white&labelColor=18181b" /></a>
-    <a href="https://www.virustotal.com/gui/file/965a31b4cc005e6f8f268b78e099f8ef7b6a13d29dc6c305e08daa67028e9bd1?nocache=1"><img alt="VirusTotal Clean" src="https://img.shields.io/badge/VirusTotal-0%2F72%20Clean-success?style=for-the-badge&logo=virustotal&logoColor=white&labelColor=18181b" /></a>
-    <a href="LICENSE"><img alt="MIT License" src="https://img.shields.io/badge/License-MIT-gray?style=for-the-badge&labelColor=18181b" /></a>
+    <a href="https://github.com/uranrog-01/opencode_providers/releases/latest"><img alt="Latest Release" src="https://img.shields.io/github/v/release/uranrog-01/opencode_providers?style=flat-square&color=10b981&labelColor=18181b" /></a>
+    <a href="https://github.com/uranrog-01/opencode_providers/releases"><img alt="Windows 10 / 11" src="https://img.shields.io/badge/Platform-Windows%2010%20%7C%2011-0078d4?style=flat-square&logo=windows11&logoColor=white&labelColor=18181b" /></a>
+    <a href="https://www.virustotal.com/gui/file/965a31b4cc005e6f8f268b78e099f8ef7b6a13d29dc6c305e08daa67028e9bd1?nocache=1"><img alt="VirusTotal Clean" src="https://img.shields.io/badge/VirusTotal-0%2F72%20Clean-success?style=flat-square&logo=virustotal&logoColor=white&labelColor=18181b" /></a>
+    <a href="LICENSE"><img alt="MIT License" src="https://img.shields.io/badge/License-MIT-64748b?style=flat-square&labelColor=18181b" /></a>
   </p>
 
-  <br />
-
   <p>
-    <a href="https://github.com/uranrog-01/opencode_providers/releases/latest/download/OpenCodeProvidersTool.exe">
-      <img src="https://img.shields.io/badge/Download_Executable-Portable_.exe_(~870_KB)-22c55e?style=for-the-badge&logo=windows&logoColor=white" alt="Download Executable" />
-    </a>
-    &nbsp;
-    <a href="https://uranrog-01.github.io/opencode_providers/">
-      <img src="https://img.shields.io/badge/Product_Website-Live_Docs-3b82f6?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Product Website" />
-    </a>
-    &nbsp;
-    <a href="https://www.virustotal.com/gui/file/965a31b4cc005e6f8f268b78e099f8ef7b6a13d29dc6c305e08daa67028e9bd1?nocache=1">
-      <img src="https://img.shields.io/badge/Security_Report-Verified_Clean-0ea5e9?style=for-the-badge&logo=shieldsdotio&logoColor=white" alt="VirusTotal Report" />
-    </a>
+    <a href="https://github.com/uranrog-01/opencode_providers/releases/latest/download/OpenCodeProvidersTool.exe"><b>⬇️ Download Portable .exe (~870 KB)</b></a> &nbsp;&bull;&nbsp;
+    <a href="https://uranrog-01.github.io/opencode_providers/"><b>🌐 Product Website</b></a> &nbsp;&bull;&nbsp;
+    <a href="https://www.virustotal.com/gui/file/965a31b4cc005e6f8f268b78e099f8ef7b6a13d29dc6c305e08daa67028e9bd1?nocache=1"><b>🛡️ VirusTotal Clean Report</b></a>
   </p>
 
   <br />
@@ -51,7 +41,7 @@ In [OpenCode](https://opencode.ai), connected providers and custom models are st
 
 <div align="center">
   <p><sub><b>OpenCode Providers View — easily configured and managed via OpenCode Providers Tool:</b></sub></p>
-  <img src="site/assets/opencode-connected-providers.jpg" alt="OpenCode Connected Providers" width="820" />
+  <img src="site/assets/opencodeapp.png" alt="OpenCode Connected Providers" width="820" />
 </div>
 
 <br />
