@@ -1,0 +1,275 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Windows.Forms;
+using System.Drawing;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+
+namespace OpenCodeConfigApp
+{
+    public class MainForm : Form
+    {
+        // UI Controls
+        private ComboBox cmbProviders;
+        private TextBox txtBaseUrl;
+        private ListBox lstModels;
+        private TextBox txtNewModel;
+        private Button btnAddModel;
+        private Button btnRemoveModel;
+        private Button btnSave;
+        private Button btnLoadFile;
+        private Label lblFilePath;
+
+        // State Tracking
+        private string currentFilePath = "";
+        private JObject originalRootJson = null;
+        private Dictionary<string, ProviderConfig> localProviders = new Dictionary<string, ProviderConfig>();
+
+        public MainForm()
+        {
+            InitializeComponent();
+            AutoDiscoverConfig();
+        }
+
+        private void InitializeComponent()
+        {
+            this.Text = "OpenCode Desktop - Provider Configuration Manager";
+            this.Size = new Size(550, 480);
+            this.FormBorderStyle = FormBorderStyle.FixedDialog;
+            this.MaximizeBox = false;
+            this.StartPosition = FormStartPosition.CenterScreen;
+
+            // File Loading Header Banner
+            lblFilePath = new Label() { Text = "No file loaded.", Location = new Point(15, 15), Size = new Point(380, 20), AutoSize = false };
+            btnLoadFile = new Button() { Text = "Browse File...", Location = new Point(410, 12), Size = new Point(110, 25) };
+            btnLoadFile.Click += BtnLoadFile_Click;
+
+            // Provider Selection Area
+            Label lblProvider = new Label() { Text = "Select Provider:", Location = new Point(15, 55), Size = new Point(120, 20) };
+            cmbProviders = new ComboBox() { Location = new Point(140, 52), Size = new Point(250, 25), DropDownStyle = ComboBoxStyle.DropDownList };
+            cmbProviders.SelectedIndexChanged += CmbProviders_SelectedIndexChanged;
+
+            // Base URL Entry field
+            Label lblBaseUrl = new Label() { Text = "Custom Base URL:", Location = new Point(15, 95), Size = new Point(120, 20) };
+            txtBaseUrl = new TextBox() { Location = new Point(140, 92), Size = new Point(380, 25) };
+
+            // Model White-list Management Module
+            Label lblModels = new Label() { Text = "Allowed Models:", Location = new Point(15, 135), Size = new Point(120, 20) };
+            lstModels = new ListBox() { Location = new Point(140, 135), Size = new Point(250, 180) };
+
+            txtNewModel = new TextBox() { Location = new Point(140, 325), Size = new Point(250, 25) };
+            btnAddModel = new Button() { Text = "Add", Location = new Point(400, 323), Size = new Point(60, 25) };
+            btnRemoveModel = new Button() { Text = "Remove Selected", Location = new Point(400, 135), Size = new Point(120, 25) };
+
+            btnAddModel.Click += BtnAddModel_Click;
+            btnRemoveModel.Click += BtnRemoveModel_Click;
+
+            // Save Commit Footer Action
+            btnSave = new Button() { Text = "Save Changes Globally", Location = new Point(140, 385), Size = new Point(250, 35), BackColor = Color.LightBlue };
+            btnSave.Click += BtnSave_Click;
+
+            // Component Composition Assembly
+            this.Controls.AddRange(new Control[] {
+                lblFilePath, btnLoadFile,
+                lblProvider, cmbProviders,
+                lblBaseUrl, txtBaseUrl,
+                lblModels, lstModels, txtNewModel, btnAddModel, btnRemoveModel,
+                btnSave
+            });
+        }
+
+        private void AutoDiscoverConfig()
+        {
+            // Scan primary working directory layouts natively 
+            string localDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "opencode.json");
+            string userProfileDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".opencode", "opencode.json");
+
+            if (File.Exists(localDir)) { LoadConfigurationFile(localDir); }
+            else if (File.Exists(userProfileDir)) { LoadConfigurationFile(userProfileDir); }
+        }
+
+        private void LoadConfigurationFile(string path)
+        {
+            try
+            {
+                string contents = File.ReadAllText(path);
+                originalRootJson = JsonConvert.DeserializeObject<JObject>(contents) ?? new JObject();
+                currentFilePath = path;
+                lblFilePath.Text = $"Active: {Path.GetFileName(path)}";
+
+                // Initialize tracking datasets safely
+                localProviders.Clear();
+                cmbProviders.Items.Clear();
+
+                // Extract structures dynamically from root object layers
+                JObject providerBlock = originalRootJson["provider"] as JObject ?? new JObject();
+
+                // Fallback default system definitions to manage missing profiles comfortably
+                string[] knownDefaults = { "anthropic", "openai", "ollama" };
+                foreach (var defaultKey in knownDefaults)
+                {
+                    localProviders[defaultKey] = new ProviderConfig();
+                }
+
+                foreach (var property in providerBlock.Properties())
+                {
+                    var config = new ProviderConfig();
+                    var options = property.Value["options"] as JObject;
+                    if (options != null && options["baseURL"] != null)
+                    {
+                        config.BaseUrl = options["baseURL"].ToString();
+                    }
+
+                    var whitelist = property.Value["whitelist"] as JArray;
+                    if (whitelist != null)
+                    {
+                        foreach (var item in whitelist)
+                        {
+                            config.Whitelist.Add(item.ToString());
+                        }
+                    }
+                    localProviders[property.Name] = config;
+                }
+
+                foreach (var providerKey in localProviders.Keys)
+                {
+                    cmbProviders.Items.Add(providerKey);
+                }
+
+                if (cmbProviders.Items.Count > 0) cmbProviders.SelectedIndex = 0;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Parsing failed on target structural layouts: {ex.Message}", "Error Loading Data", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void BtnLoadFile_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog ofd = new OpenFileDialog() { Filter = "JSON Files|*.json|All Files|*.*" })
+            {
+                if (ofd.ShowDialog() == DialogResult.OK)
+                {
+                    LoadConfigurationFile(ofd.FileName);
+                }
+            }
+        }
+
+        private void CmbProviders_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            SaveCurrentSelectionState();
+            
+            string selected = cmbProviders.SelectedItem?.ToString();
+            if (!string.IsNullOrEmpty(selected) && localProviders.ContainsKey(selected))
+            {
+                var targetConfig = localProviders[selected];
+                txtBaseUrl.Text = targetConfig.BaseUrl;
+                lstModels.Items.Clear();
+                foreach (var model in targetConfig.Whitelist)
+                {
+                    lstModels.Items.Add(model);
+                }
+            }
+        }
+
+        private void SaveCurrentSelectionState()
+        {
+            if (cmbProviders.Tag != null)
+            {
+                string previousProvider = cmbProviders.Tag.ToString();
+                if (localProviders.ContainsKey(previousProvider))
+                {
+                    var config = localProviders[previousProvider];
+                    config.BaseUrl = txtBaseUrl.Text.Trim();
+                    config.Whitelist.Clear();
+                    foreach (var item in lstModels.Items)
+                    {
+                        config.Whitelist.Add(item.ToString());
+                    }
+                }
+            }
+            cmbProviders.Tag = cmbProviders.SelectedItem?.ToString();
+        }
+
+        private void BtnAddModel_Click(object sender, EventArgs e)
+        {
+            string entry = txtNewModel.Text.Trim();
+            if (!string.IsNullOrEmpty(entry) && !lstModels.Items.Contains(entry))
+            {
+                lstModels.Items.Add(entry);
+                txtNewModel.Clear();
+            }
+        }
+
+        private void BtnRemoveModel_Click(object sender, EventArgs e)
+        {
+            if (lstModels.SelectedIndex != -1)
+            {
+                lstModels.Items.RemoveAt(lstModels.SelectedIndex);
+            }
+        }
+
+        private void BtnSave_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(currentFilePath) || originalRootJson == null)
+            {
+                MessageBox.Show("Please load a valid target file context layout instance before executing saves.", "Action Interrupted", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            SaveCurrentSelectionState();
+
+            // Structure root block updates natively to preserve surrounding metadata safely
+            JObject providerBlock = new JObject();
+
+            foreach (var pair in localProviders)
+            {
+                // Only serialize custom-configured elements cleanly to avoid footprint bloating
+                if (!string.IsNullOrEmpty(pair.Value.BaseUrl) || pair.Value.Whitelist.Count > 0)
+                {
+                    JObject body = new JObject();
+                    if (!string.IsNullOrEmpty(pair.Value.BaseUrl))
+                    {
+                        body["options"] = new JObject { { "baseURL", pair.Value.BaseUrl } };
+                    }
+                    if (pair.Value.Whitelist.Count > 0)
+                    {
+                        body["whitelist"] = JArray.FromObject(pair.Value.Whitelist);
+                    }
+                    providerBlock[pair.Key] = body;
+                }
+            }
+
+            originalRootJson["provider"] = providerBlock;
+
+            try
+            {
+                string output = JsonConvert.SerializeObject(originalRootJson, Formatting.Indented);
+                File.WriteAllText(currentFilePath, output);
+                MessageBox.Show("OpenCode parameters updated and synchronized cleanly downstream!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"File sync interrupted by access limitations: {ex.Message}", "Save Failure", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+    }
+
+    public class ProviderConfig
+    {
+        public string BaseUrl { get; set; } = "";
+        public List<string> Whitelist { get; set; } = new List<string>();
+    }
+
+    static class Program
+    {
+        [STAThread]
+        static void Main()
+        {
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+            Application.Run(new MainForm());
+        }
+    }
+}

@@ -1,0 +1,41 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build-and-test:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      # The app targets .NET Framework 4.8; the reference assemblies come from the
+      # Microsoft.NETFramework.ReferenceAssemblies package, so no Visual Studio is needed.
+      - name: Build
+        working-directory: OpenCodeProvidersTool
+        run: dotnet build -c Release -o ..\release
+
+      # Config round-trip, limits, comments, enabled_providers, the models.dev matcher
+      # and the Smart add discovery — run against the sample config in the repository.
+      - name: Self test
+        working-directory: selftest
+        run: dotnet run -c Release -- ..\samples\opencode.sample.jsonc
+
+      # Builds the real dialogs off-screen and checks their layout and behaviour.
+      - name: UI test
+        working-directory: uitest
+        run: dotnet run -c Release
+
+      - name: Upload the built exe
+        uses: actions/upload-artifact@v4
+        with:
+          name: OpenCodeProvidersTool
+          path: release/OpenCodeProvidersTool.exe

@@ -1,0 +1,44 @@
+{
+  // OpenCode Providers Tool — sample config.
+  //
+  // Used by the test suites, and handy for trying the editor without touching your
+  // real setup: open it with
+  //     OpenCodeProvidersTool.exe samples\opencode.sample.jsonc
+  // The comments here are intentional — they demonstrate that a save keeps them.
+  "$schema": "https://opencode.ai/config.json",
+  "provider": {
+    // A local relay: OpenAI-compatible, reached over the OpenAI SDK.
+    "local-relay": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Local Relay",
+      "options": {
+        "baseURL": "https://api.example.com/v1"
+        // "apiKey": "put your key here, or set it in the app"
+      },
+      "models": {
+        "gpt-4o": {
+          "name": "GPT-4o via Local Relay"
+        },
+        "gpt-4o-mini": {
+          "name": "GPT-4o mini",
+          // context and output always travel together: OpenCode requires both.
+          "limit": {
+            "context": 128000,
+            "output": 16384
+          }
+        }
+      }
+    },
+    "second-provider": {
+      "npm": "@ai-sdk/anthropic",
+      "name": "Second Provider",
+      "models": {
+        "claude-sonnet": {
+          "name": "Claude Sonnet"
+        }
+      }
+    }
+  },
+  "disabled_providers": []
+  // Nothing below this line — the file ends here.
+}

@@ -1,0 +1,22 @@
+# Build output
+bin/
+obj/
+
+# Python leftovers from the earlier tkinter version
+__pycache__/
+*.pyc
+
+# Logs the app and its helpers write next to themselves
+*.log
+
+# Editor / agent tooling that lives in this folder but is not part of the project
+.commandcode/
+.zcodeignore
+
+# UI captures, anywhere in the tree: they show whichever config happened to be open,
+# and uitest regenerates its own pair on every run. Deliberately not in the repository.
+*.png
+
+# ...except the product page's own images, which are picked deliberately and are part of
+# the page. Without this the site deploys with broken screenshots.
+!site/assets/*.png

@@ -1,0 +1,46 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net48</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <LangVersion>latest</LangVersion>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <RootNamespace>OpenCodeUiTest</RootNamespace>
+    <AssemblyName>OpenCodeUiTest</AssemblyName>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <DebugType>none</DebugType>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <GenerateSupportedRuntime>false</GenerateSupportedRuntime>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="System.Net.Http" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- The whole app, minus its own entry point, so the probe instantiates the
+         real dialogs and measures the real control tree. -->
+    <Compile Include="Program.cs" />
+    <Compile Include="..\OpenCodeProvidersTool\Theme.cs" Link="Theme.cs" />
+    <Compile Include="..\OpenCodeProvidersTool\Icons.cs" Link="Icons.cs" />
+    <Compile Include="..\OpenCodeProvidersTool\Controls.cs" Link="Controls.cs" />
+    <Compile Include="..\OpenCodeProvidersTool\NavControls.cs" Link="NavControls.cs" />
+    <Compile Include="..\OpenCodeProvidersTool\ListControls.cs" Link="ListControls.cs" />
+    <Compile Include="..\OpenCodeProvidersTool\Dropdown.cs" Link="Dropdown.cs" />
+    <Compile Include="..\OpenCodeProvidersTool\Dialogs.cs" Link="Dialogs.cs" />
+    <Compile Include="..\OpenCodeProvidersTool\ConfigStore.cs" Link="ConfigStore.cs" />
+    <Compile Include="..\OpenCodeProvidersTool\ConfigComments.cs" Link="ConfigComments.cs" />
+    <Compile Include="..\OpenCodeProvidersTool\ModelCatalog.cs" Link="ModelCatalog.cs" />
+    <Compile Include="..\OpenCodeProvidersTool\ModelDiscovery.cs" Link="ModelDiscovery.cs" />
+    <Compile Include="..\OpenCodeProvidersTool\SmartState.cs" Link="SmartState.cs" />
+    <Compile Include="..\OpenCodeProvidersTool\OpenCodeLocator.cs" Link="OpenCodeLocator.cs" />
+    <Compile Include="..\OpenCodeProvidersTool\MainForm.cs" Link="MainForm.cs" />
+  </ItemGroup>
+
+</Project>

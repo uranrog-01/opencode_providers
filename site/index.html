@@ -1,0 +1,644 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>OpenCode Providers Tool — providers, models and limits in one window</title>
+    <meta
+      name="description"
+      content="A free, open-source Windows app for OpenCode: add providers, point them at a Base URL, add models, and keep token limits in sync with models.dev — without hand-editing opencode.json."
+    />
+    <link rel="icon" href="assets/favicon.ico" sizes="any" />
+    <link rel="apple-touch-icon" href="assets/logo.png" />
+    <meta property="og:title" content="OpenCode Providers Tool" />
+    <meta
+      property="og:description"
+      content="A free, open-source Windows app for OpenCode: providers, models and token limits, in one window."
+    />
+    <meta property="og:image" content="https://uranrog-01.github.io/opencode_providers/assets/app-window.png" />
+    <meta name="theme-color" content="#0b0b0c" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #0b0b0c;
+        --bg-soft: #101011;
+        --card: #141416;
+        --line: #232326;
+        --line-hot: #34343a;
+        --text: #f1f0f0;
+        --dim: #a5a3a3;
+        --faint: #6e6c6c;
+        --accent: #4c8dff;
+        --ok: #34c759;
+        --sans: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+        --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+        --pad: clamp(20px, 5vw, 40px);
+        --max: 1180px;
+        --radius: 14px;
+      }
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        font-size: 17px;
+        line-height: 1.65;
+        -webkit-font-smoothing: antialiased;
+      }
+      a {
+        color: var(--text);
+        text-decoration: none;
+      }
+      img {
+        display: block;
+        max-width: 100%;
+      }
+      code,
+      pre {
+        font-family: var(--mono);
+      }
+      .wrap {
+        width: 100%;
+        max-width: var(--max);
+        margin: 0 auto;
+        padding: 0 var(--pad);
+      }
+
+      /* ------------------------------------------------------------------ header */
+      header {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        border-bottom: 1px solid var(--line);
+        background: rgba(11, 11, 12, 0.84);
+        backdrop-filter: blur(14px);
+      }
+      header .wrap {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        height: 62px;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        font-weight: 600;
+        letter-spacing: -0.01em;
+      }
+      .brand img {
+        width: 26px;
+        height: 26px;
+        border-radius: 7px;
+      }
+      header nav {
+        margin-left: auto;
+        display: flex;
+        align-items: center;
+        gap: 26px;
+        font-family: var(--mono);
+        font-size: 13px;
+        color: var(--dim);
+      }
+      header nav a:hover {
+        color: var(--text);
+      }
+      @media (max-width: 780px) {
+        header nav a:not(.btn) {
+          display: none;
+        }
+      }
+
+      /* ----------------------------------------------------------------- buttons */
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 9px;
+        padding: 11px 19px;
+        border: 1px solid var(--line-hot);
+        border-radius: 10px;
+        font-family: var(--mono);
+        font-size: 13.5px;
+        color: var(--text);
+        background: var(--card);
+        transition: border-color 0.15s ease, background 0.15s ease, transform 0.15s ease;
+        white-space: nowrap;
+      }
+      .btn:hover {
+        border-color: #4a4a52;
+        transform: translateY(-1px);
+      }
+      .btn--solid {
+        background: var(--text);
+        color: #141416;
+        border-color: var(--text);
+        font-weight: 500;
+      }
+      .btn--solid:hover {
+        background: #fff;
+      }
+
+      /* -------------------------------------------------------------------- hero */
+      .hero {
+        position: relative;
+        padding: clamp(64px, 9vw, 104px) 0 clamp(56px, 7vw, 88px);
+        text-align: center;
+        overflow: hidden;
+      }
+      .hero::before {
+        content: "";
+        position: absolute;
+        inset: -30% 0 auto;
+        height: 620px;
+        background: radial-gradient(52% 60% at 50% 42%, rgba(76, 141, 255, 0.15), transparent 70%);
+        pointer-events: none;
+      }
+      .eyebrow {
+        position: relative;
+        font-family: var(--mono);
+        font-size: 12.5px;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--faint);
+      }
+      h1 {
+        position: relative;
+        margin: 20px auto 0;
+        max-width: 16ch;
+        font-size: clamp(38px, 6.4vw, 68px);
+        line-height: 1.05;
+        letter-spacing: -0.035em;
+        font-weight: 700;
+      }
+      .lede {
+        position: relative;
+        margin: 22px auto 0;
+        max-width: 62ch;
+        color: var(--dim);
+        font-size: clamp(17px, 2vw, 19.5px);
+      }
+      .cta {
+        position: relative;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        justify-content: center;
+        margin-top: 32px;
+      }
+      .meta {
+        position: relative;
+        margin-top: 20px;
+        font-family: var(--mono);
+        font-size: 12.5px;
+        color: var(--faint);
+      }
+      .shot {
+        position: relative;
+        margin: clamp(40px, 6vw, 64px) 0 0;
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: var(--card);
+        padding: 10px;
+        box-shadow: 0 40px 90px -40px rgba(0, 0, 0, 0.9);
+      }
+      .shot img {
+        border-radius: 8px;
+        width: 100%;
+      }
+
+      /* ---------------------------------------------------------------- sections */
+      section {
+        padding: clamp(64px, 8vw, 104px) 0;
+        border-top: 1px solid var(--line);
+      }
+      .kicker {
+        font-family: var(--mono);
+        font-size: 12.5px;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--faint);
+      }
+      h2 {
+        margin: 14px 0 0;
+        font-size: clamp(27px, 3.6vw, 40px);
+        line-height: 1.15;
+        letter-spacing: -0.03em;
+        font-weight: 700;
+        max-width: 24ch;
+      }
+      section > .wrap > p {
+        color: var(--dim);
+        max-width: 70ch;
+        margin: 18px 0 0;
+      }
+
+      /* ------------------------------------------------------------------- steps */
+      .step {
+        display: grid;
+        grid-template-columns: minmax(0, 0.82fr) minmax(0, 1.18fr);
+        gap: clamp(24px, 4vw, 56px);
+        align-items: center;
+        margin-top: 56px;
+      }
+      .step--flip .step__text {
+        order: 2;
+      }
+      .step__n {
+        font-family: var(--mono);
+        font-size: 12.5px;
+        color: var(--faint);
+        margin: 0;
+      }
+      .step h3 {
+        margin: 10px 0 0;
+        font-size: clamp(20px, 2.4vw, 26px);
+        letter-spacing: -0.02em;
+        font-weight: 600;
+      }
+      .step p {
+        color: var(--dim);
+        margin: 12px 0 0;
+      }
+      .step__shot {
+        margin: 0;
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: var(--card);
+        padding: 9px;
+      }
+      .step__shot img {
+        border-radius: 7px;
+        width: 100%;
+      }
+      .step__shot--tall img {
+        margin: 0 auto;
+        width: auto;
+        max-height: 470px;
+      }
+      @media (max-width: 880px) {
+        .step {
+          grid-template-columns: 1fr;
+        }
+        .step--flip .step__text {
+          order: 0;
+        }
+      }
+      .checks {
+        list-style: none;
+        margin: 18px 0 0;
+        padding: 0;
+        display: grid;
+        gap: 9px;
+        font-family: var(--mono);
+        font-size: 13.5px;
+        color: var(--dim);
+      }
+      .checks li::before {
+        content: "[*]";
+        color: var(--ok);
+        margin-right: 10px;
+      }
+
+      /* ------------------------------------------------------------------- cards */
+      .cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(285px, 1fr));
+        gap: 18px;
+        margin-top: 44px;
+      }
+      .card {
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: var(--bg-soft);
+        padding: 22px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+      }
+      .card h3 {
+        margin: 0;
+        font-size: 17px;
+        letter-spacing: -0.01em;
+        font-weight: 600;
+      }
+      .card p {
+        margin: 10px 0 0;
+        color: var(--dim);
+        font-size: 15px;
+      }
+      .card img {
+        margin: 20px -22px -22px;
+        width: calc(100% + 44px);
+        border-top: 1px solid var(--line);
+      }
+
+      /* -------------------------------------------------------------------- code */
+      pre {
+        margin: 22px 0 0;
+        padding: 18px 20px;
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: var(--bg-soft);
+        overflow-x: auto;
+        font-size: 13.5px;
+        line-height: 1.75;
+        color: var(--text);
+      }
+      pre .c {
+        color: var(--faint);
+      }
+      pre .k {
+        color: var(--accent);
+      }
+
+      /* ------------------------------------------------------------------ footer */
+      footer {
+        border-top: 1px solid var(--line);
+        padding: 44px 0 64px;
+        color: var(--faint);
+        font-size: 14px;
+      }
+      footer .wrap {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px 28px;
+        align-items: center;
+      }
+      footer a:hover {
+        color: var(--text);
+      }
+      footer .spacer {
+        margin-left: auto;
+      }
+      .note {
+        font-family: var(--mono);
+        font-size: 12.5px;
+        color: var(--faint);
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="wrap">
+        <a class="brand" href="#top">
+          <img src="assets/logo.png" alt="" width="26" height="26" />
+          OpenCode Providers Tool
+        </a>
+        <nav>
+          <a href="#how">How it works</a>
+          <a href="#features">Features</a>
+          <a href="#install">Install</a>
+          <a class="btn" href="https://github.com/uranrog-01/opencode_providers/releases/latest">
+            Download for Windows
+          </a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="top">
+      <!-- ------------------------------------------------------------------ hero -->
+      <div class="hero">
+        <div class="wrap">
+          <p class="eyebrow">Free &amp; open source · MIT · Windows</p>
+          <h1>Your OpenCode providers, without the JSON.</h1>
+          <p class="lede">
+            Add a provider, point it at a Base URL, paste the key, add models. Limits come from models.dev and
+            stay in sync on every save — and the comments in your <code>opencode.jsonc</code> stay exactly
+            where you put them.
+          </p>
+          <div class="cta">
+            <a
+              class="btn btn--solid"
+              href="https://github.com/uranrog-01/opencode_providers/releases/latest"
+            >
+              ↓ Download OpenCodeProvidersTool.exe
+            </a>
+            <a class="btn" href="https://github.com/uranrog-01/opencode_providers">View source on GitHub</a>
+          </div>
+          <p class="meta">One file · no installer · no runtime to download · .NET Framework 4.8</p>
+
+          <figure class="shot">
+            <img
+              src="assets/app-window.png"
+              alt="The OpenCode Providers Tool window: a provider list on the left, and the selected provider's name, Base URL, API format, API key and models on the right."
+              width="1160"
+              height="760"
+            />
+          </figure>
+        </div>
+      </div>
+
+      <!-- ------------------------------------------------------------------- how -->
+      <section id="how">
+        <div class="wrap">
+          <p class="kicker">How it works</p>
+          <h2>Four steps from nothing to a model OpenCode can use.</h2>
+          <p>
+            These are the real app, captured against a demo config — no mockups. Every step writes into your
+            <code>opencode.jsonc</code>, and nothing is saved until you press <strong>Save changes</strong>.
+          </p>
+
+          <div class="step">
+            <div class="step__text">
+              <p class="step__n">01 — Name it</p>
+              <h3>Add a provider</h3>
+              <p>
+                <strong>Add provider</strong> asks for the provider id. That string becomes the key under
+                <code>"provider"</code> in the config, so it is the one thing worth getting right up front.
+              </p>
+            </div>
+            <figure class="step__shot step__shot--tall">
+              <img
+                src="assets/step-provider-id.png"
+                alt="The Add provider dialog asking for a Provider ID, with my-relay typed in."
+                width="470"
+                height="250"
+              />
+            </figure>
+          </div>
+
+          <div class="step step--flip">
+            <div class="step__text">
+              <p class="step__n">02 — Point it somewhere</p>
+              <h3>Fill in the URL and the key</h3>
+              <p>
+                Give it a display name, a <code>baseURL</code> and the API key. The API format is chosen from
+                the usual SDKs, and an OpenAI-compatible relay is the default. The key is masked on screen,
+                and a blank field never erases a key that is already saved.
+              </p>
+              <ul class="checks">
+                <li>name · baseURL · apiKey</li>
+                <li>blank field = leave the saved value alone</li>
+              </ul>
+            </div>
+            <figure class="step__shot">
+              <img
+                src="assets/step-provider-filled.png"
+                alt="The provider My Relay filled in, with Base URL https://api.myrelay.example/v1 and a masked API key."
+                width="1160"
+                height="760"
+              />
+            </figure>
+          </div>
+
+          <div class="step">
+            <div class="step__text">
+              <p class="step__n">03 — Give it models</p>
+              <h3>Add a model</h3>
+              <p>
+                Add models by ID and give them a display name. Context window and max output are looked up on
+                models.dev as you type — each field is labelled <strong>auto</strong> or
+                <strong>manual</strong>, and the moment you edit one it stops following recommendations.
+              </p>
+              <ul class="checks">
+                <li>context and output are written together, as the schema requires</li>
+                <li>Reset form hands a field back to the recommendation</li>
+              </ul>
+            </div>
+            <figure class="step__shot step__shot--tall">
+              <img
+                src="assets/step-model.png"
+                alt="The Add model dialog with Model ID gpt-4o, context 128000, max output 16384 and display name GPT-4o via My Relay."
+                width="560"
+                height="496"
+              />
+            </figure>
+          </div>
+
+          <div class="step step--flip">
+            <div class="step__text">
+              <p class="step__n">04 — Save</p>
+              <h3>One button, and it is live</h3>
+              <p>
+                <strong>Save changes</strong> writes the file: a <code>.bak</code> copy first, then 2-space
+                JSON with your comments put back where they were. OpenCode picks it up on its next start, and
+                the models you added are selectable.
+              </p>
+            </div>
+            <figure class="step__shot">
+              <img
+                src="assets/step-saved.png"
+                alt="The app after saving, showing My Relay with gpt-4o and gpt-4o-mini in the model list."
+                width="1160"
+                height="760"
+              />
+            </figure>
+          </div>
+        </div>
+      </section>
+
+      <!-- -------------------------------------------------------------- features -->
+      <section id="features">
+        <div class="wrap">
+          <p class="kicker">Features</p>
+          <h2>Built so it cannot lose your config.</h2>
+          <p>
+            The brief was “do not break the file”, and that shapes almost every decision in the editor.
+          </p>
+
+          <div class="cards">
+            <div class="card">
+              <h3>Smart configuration</h3>
+              <p>
+                Display name, context window and max output are looked up on models.dev by model ID, Base URL
+                host and API format — and refreshed on every save. A value you typed yourself is never
+                overwritten.
+              </p>
+              <img
+                src="assets/smart-model.png"
+                alt="The model editor with auto-labelled fields filled from models.dev."
+                loading="lazy"
+              />
+            </div>
+            <div class="card">
+              <h3>Smart add</h3>
+              <p>
+                Reads the provider's own <code>{baseURL}/models</code> catalog, so a whole endpoint can be
+                added at once instead of one row at a time. models.dev fills in whatever the provider left
+                out.
+              </p>
+              <img
+                src="assets/smart-add.png"
+                alt="The Smart add dialog listing a provider's models as a check list."
+                loading="lazy"
+              />
+            </div>
+            <div class="card">
+              <h3>Finds your setup</h3>
+              <p>
+                Checks <code>PATH</code>, npm, bun and pnpm global roots, scoop, chocolatey, winget,
+                <code>%LOCALAPPDATA%\Programs</code> and <code>C:\Program Files</code> — then opens the global
+                config for you.
+              </p>
+              <img
+                src="assets/about.png"
+                alt="The About dialog showing the detected OpenCode installation."
+                loading="lazy"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- --------------------------------------------------------------- install -->
+      <section id="install">
+        <div class="wrap">
+          <p class="kicker">Install</p>
+          <h2>Download one file and run it.</h2>
+          <p>
+            No installer, and nothing to put beside it. Windows 10 (1903+) and Windows 11 already ship the
+            runtime it needs.
+          </p>
+          <pre><span class="c"># grab the exe from the latest release, then double-click it</span>
+<span class="k">OpenCodeProvidersTool.exe</span>
+
+<span class="c"># or open a specific config instead of the global one</span>
+<span class="k">OpenCodeProvidersTool.exe</span> C:\path\to\opencode.jsonc</pre>
+          <p class="note">Every save writes a .bak copy of the previous file first.</p>
+        </div>
+      </section>
+
+      <!-- ----------------------------------------------------------- never touch -->
+      <section>
+        <div class="wrap">
+          <p class="kicker">What it never touches</p>
+          <h2>The edits stay in their lane.</h2>
+          <p>
+            Only the fields you actually change are written. Everything else — including keys this tool has
+            never heard of — survives a save exactly as it was.
+          </p>
+          <ul class="checks">
+            <li>$schema, plugin, and every unedited provider</li>
+            <li>modalities, variants, cost, and an extra limit.input</li>
+            <li>comments in a .jsonc file, put back where they were</li>
+            <li>disabled_providers entries that belong to no provider block</li>
+            <li>an enabled_providers whitelist, kept in step with the toggle</li>
+          </ul>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="wrap">
+        <img src="assets/logo.png" alt="" width="22" height="22" />
+        <span>OpenCode Providers Tool — by zer0ne</span>
+        <a href="https://github.com/uranrog-01/opencode_providers/blob/main/LICENSE">MIT licensed</a>
+        <a href="https://github.com/uranrog-01/opencode_providers">Source</a>
+        <a class="spacer" href="https://github.com/uranrog-01/opencode_providers/releases/latest">Releases</a>
+      </div>
+    </footer>
+  </body>
+</html>

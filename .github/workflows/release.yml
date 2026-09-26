@@ -1,0 +1,38 @@
+name: Release
+
+# Push a tag like v1.0.0 and this builds the exe, runs the checks, and publishes a
+# GitHub Release with the exe attached and generated release notes.
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Build
+        working-directory: OpenCodeProvidersTool
+        run: dotnet build -c Release -o ..\release
+
+      # A release is never published unless the config round-trip checks pass.
+      - name: Self test
+        working-directory: selftest
+        run: dotnet run -c Release -- ..\samples\opencode.sample.jsonc
+
+      - name: Publish the release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: release/OpenCodeProvidersTool.exe
+          generate_release_notes: true
+          draft: false
