@@ -9,11 +9,10 @@
 [![CI Status](https://img.shields.io/github/actions/workflow/status/uranrog-01/opencode_providers/ci.yml?branch=main&label=CI&style=flat-square)](https://github.com/uranrog-01/opencode_providers/actions/workflows/ci.yml)
 [![Pages Status](https://img.shields.io/github/actions/workflow/status/uranrog-01/opencode_providers/pages.yml?branch=main&label=Website&style=flat-square)](https://uranrog-01.github.io/opencode_providers/)
 [![VirusTotal Clean](https://img.shields.io/badge/VirusTotal-Clean%20(0%2F72)-brightgreen?style=flat-square&logo=virustotal)](https://www.virustotal.com/gui/file/965a31b4cc005e6f8f268b78e099f8ef7b6a13d29dc6c305e08daa67028e9bd1?nocache=1)
-[![Hybrid Analysis Clean](https://img.shields.io/badge/Hybrid%20Analysis-Clean%20%26%20Safe-blue?style=flat-square&logo=shield)](https://hybrid-analysis.com/sample/965a31b4cc005e6f8f268b78e099f8ef7b6a13d29dc6c305e08daa67028e9bd1)
 
 ---
 
-**[Download for Windows (v1.0.0)](https://github.com/uranrog-01/opencode_providers/releases/latest/download/OpenCodeProvidersTool.exe) • [Product Website](https://uranrog-01.github.io/opencode_providers/) • [VirusTotal Report](https://www.virustotal.com/gui/file/965a31b4cc005e6f8f268b78e099f8ef7b6a13d29dc6c305e08daa67028e9bd1?nocache=1) • [Hybrid Analysis](https://hybrid-analysis.com/sample/965a31b4cc005e6f8f268b78e099f8ef7b6a13d29dc6c305e08daa67028e9bd1)**
+**[Download for Windows (v1.0.0)](https://github.com/uranrog-01/opencode_providers/releases/latest/download/OpenCodeProvidersTool.exe) • [Product Website](https://uranrog-01.github.io/opencode_providers/) • [VirusTotal Report](https://www.virustotal.com/gui/file/965a31b4cc005e6f8f268b78e099f8ef7b6a13d29dc6c305e08daa67028e9bd1?nocache=1)**
 
 ---
 
@@ -51,12 +50,10 @@
 
 ## 🛡️ Security & Clean Antivirus Verification
 
-Trust and security are paramount when managing API credentials and development tools. The compiled release binary has been scanned across top malware analysis sandboxes with **100% clean detections**:
+Trust and security are paramount when managing API credentials and development tools. The compiled release binary has been scanned with **100% clean detection** on VirusTotal:
 
 * **VirusTotal Detection:** **0 / 72 Security Vendors (Clean)**
   * [View Live VirusTotal Analysis](https://www.virustotal.com/gui/file/965a31b4cc005e6f8f268b78e099f8ef7b6a13d29dc6c305e08daa67028e9bd1?nocache=1)
-* **Hybrid Analysis Score:** **100 / 100 Clean (No Threat Detected)**
-  * [View Live Hybrid Analysis Sandbox Report](https://hybrid-analysis.com/sample/965a31b4cc005e6f8f268b78e099f8ef7b6a13d29dc6c305e08daa67028e9bd1)
 * **Target SHA-256 Checksum:**
   `965a31b4cc005e6f8f268b78e099f8ef7b6a13d29dc6c305e08daa67028e9bd1`
 
@@ -138,25 +135,25 @@ The application is engineered with safety as its primary constraint. Here is the
 
 ```mermaid
 flowchart TD
-    A[Launch OpenCodeProvidersTool.exe] --> B[OpenCodeLocator: Scan System & Path]
-    B --> C[Locate Global Config or Custom Target]
-    C --> D[ConfigComments: Parse JSONC & Extract Comments Map]
-    D --> E[ConfigStore: Load Providers & Model Metadata]
-    E --> F[MainForm: Display UI & Status Indicators]
+    A["Launch OpenCodeProvidersTool.exe"] --> B["OpenCodeLocator: Scan System & Path"]
+    B --> C["Locate Global Config or Custom Target"]
+    C --> D["ConfigComments: Parse JSONC & Extract Comments Map"]
+    D --> E["ConfigStore: Load Providers & Model Metadata"]
+    E --> F["MainForm: Display UI & Status Indicators"]
     
-    F --> G[Action: Add / Edit Provider & API Key]
-    F --> H[Action: Smart Add Live {baseURL}/models]
-    F --> I[Action: Smart Limits via models.dev Cache]
+    F --> G["Action: Add / Edit Provider & API Key"]
+    F --> H["Action: Smart Add Live Base URL Models"]
+    F --> I["Action: Smart Limits via models.dev Cache"]
     
-    G --> J[Unsaved State Tracker Active]
+    G --> J["Unsaved State Tracker Active"]
     H --> J
     I --> J
     
-    J --> K[User Clicks Save Changes]
-    K --> L[Step 1: Write <filename>.bak Backup]
-    K --> M[Step 2: Enforce Limit Pairs context + output]
-    K --> N[Step 3: Re-inject Preserved JSONC Comments]
-    K --> O[Step 4: Atomically Write opencode.jsonc]
+    J --> K["User Clicks Save Changes"]
+    K --> L["Step 1: Write Backup (.bak) File"]
+    K --> M["Step 2: Enforce Limit Pairs (context + output)"]
+    K --> N["Step 3: Re-inject Preserved JSONC Comments"]
+    K --> O["Step 4: Atomically Write opencode.jsonc"]
 ```
 
 ### Component Analysis
