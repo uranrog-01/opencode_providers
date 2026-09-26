@@ -1,130 +1,106 @@
 <p align="center">
   <a href="https://uranrog-01.github.io/opencode_providers/">
-    <img src="site/assets/logo.png" alt="OpenCode Providers Tool" width="64" height="64" />
+    <img src="site/assets/logo.png" alt="OpenCode Providers Tool" width="48" height="48" />
   </a>
 </p>
 
-<h1 align="center">OpenCode Providers Tool</h1>
-
-<p align="center">A fast, visual provider and model editor for <a href="https://opencode.ai">OpenCode</a>.</p>
-<p align="center"><b>Add, edit, or remove models on existing providers without ever disconnecting them.</b></p>
+<h3 align="center">OpenCode Providers Tool</h3>
 
 <p align="center">
-  <a href="https://github.com/uranrog-01/opencode_providers/releases"><img alt="Release" src="https://img.shields.io/github/v/release/uranrog-01/opencode_providers?style=flat-square&color=3b82f6" /></a>
-  <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-10b981.svg?style=flat-square" /></a>
-  <a href="https://www.virustotal.com/gui/file/965a31b4cc005e6f8f268b78e099f8ef7b6a13d29dc6c305e08daa67028e9bd1?nocache=1"><img alt="VirusTotal Clean" src="https://img.shields.io/badge/VirusTotal-Clean%20(0%2F72)-brightgreen?style=flat-square&logo=virustotal" /></a>
-  <a href="https://github.com/uranrog-01/opencode_providers/releases"><img alt="Platform: Windows" src="https://img.shields.io/badge/Platform-Windows-blue?style=flat-square&logo=windows" /></a>
+  <em>The visual provider &amp; model editor for <a href="https://opencode.ai">OpenCode</a>.</em><br />
+  Add, edit, or remove models on existing providers — without ever disconnecting them.
 </p>
 
 <p align="center">
-  <a href="https://github.com/uranrog-01/opencode_providers/releases/latest/download/OpenCodeProvidersTool.exe"><b>Download .exe</b></a> &bull;
-  <a href="https://uranrog-01.github.io/opencode_providers/"><b>Website</b></a> &bull;
-  <a href="https://www.virustotal.com/gui/file/965a31b4cc005e6f8f268b78e099f8ef7b6a13d29dc6c305e08daa67028e9bd1?nocache=1"><b>VirusTotal (0/72 Clean)</b></a>
+  <a href="https://github.com/uranrog-01/opencode_providers/releases"><img alt="Release" src="https://img.shields.io/github/v/release/uranrog-01/opencode_providers?style=flat-square" /></a>
+  <a href="LICENSE"><img alt="MIT" src="https://img.shields.io/badge/License-MIT-green.svg?style=flat-square" /></a>
+  <a href="https://www.virustotal.com/gui/file/965a31b4cc005e6f8f268b78e099f8ef7b6a13d29dc6c305e08daa67028e9bd1?nocache=1"><img alt="VirusTotal" src="https://img.shields.io/badge/VirusTotal-0%2F72_Clean-brightgreen?style=flat-square&logo=virustotal" /></a>
+  <a href="https://github.com/uranrog-01/opencode_providers/releases"><img alt="Windows" src="https://img.shields.io/badge/Windows-10%20|%2011-blue?style=flat-square&logo=windows11" /></a>
 </p>
 
 <br />
 
 <p align="center">
-  <img src="site/assets/apptool_main.jpg" alt="OpenCode Providers Tool Interface" width="860" />
+  <a href="https://github.com/uranrog-01/opencode_providers/releases/latest/download/OpenCodeProvidersTool.exe"><img src="site/assets/apptool_main.jpg" alt="OpenCode Providers Tool" width="820" /></a>
+</p>
+
+<p align="center">
+  <a href="https://github.com/uranrog-01/opencode_providers/releases/latest/download/OpenCodeProvidersTool.exe"><b>Download</b></a> · <a href="https://uranrog-01.github.io/opencode_providers/"><b>Website</b></a> · <a href="https://www.virustotal.com/gui/file/965a31b4cc005e6f8f268b78e099f8ef7b6a13d29dc6c305e08daa67028e9bd1?nocache=1"><b>VirusTotal Report</b></a>
 </p>
 
 ---
 
 ### Installation
 
-Download the single standalone executable directly from [Releases](https://github.com/uranrog-01/opencode_providers/releases), or run via PowerShell:
-
 ```powershell
 irm https://github.com/uranrog-01/opencode_providers/releases/latest/download/OpenCodeProvidersTool.exe -OutFile OpenCodeProvidersTool.exe
 .\OpenCodeProvidersTool.exe
 ```
 
-> **Note:** Portable single-file binary (~870 KB). No installer, no background services, runs instantly.
+Single portable `.exe` (~870 KB). No installer needed — runs on .NET Framework 4.8 (pre-installed on Windows 10/11).
 
 ---
 
-### What is OpenCode Providers Tool?
+### Why?
 
-**OpenCode Providers Tool** is an open-source visual manager for [OpenCode](https://opencode.ai) configuration. Instead of manually editing fragile `.jsonc` files by hand, it lets you configure providers, add API keys, and discover live models in seconds.
+OpenCode reads providers and models from a `.jsonc` config file. Editing it by hand is fragile — missing token limits break sessions, JSON formatters destroy your comments, and typos in model IDs waste time.
 
-* `[*]` **In-Place Provider Editing** — Add, remove, or edit models on any existing provider without disconnecting or re-authenticating it in OpenCode.
-* `[*]` **1-Click Live Discovery** — Query `{baseURL}/models` directly with your API key to fetch and import models in bulk.
-* `[*]` **models.dev Limits Auto-Sync** — Automatically populates accurate context window (`limit.context`) and output limits (`limit.output`).
-* `[*]` **Comment & Structure Preservation** — Safe `.jsonc` engine ensures your handwritten comments and formatting never get wiped.
-* `[*]` **Automatic Backups** — Creates a timestamped `.bak` copy of your configuration before every save.
-* `[*]` **100% Private & Local** — Zero telemetry, zero external relays. Your keys stay entirely on your device.
+This tool replaces all of that with a visual editor.
 
----
-
-### Edit Providers Without Disconnecting
-
-In OpenCode's native settings, modifying an already connected provider is frustrating. Adding a newly released model, pruning deprecated models, or adjusting token limits normally forces you to disconnect the provider completely or edit complex `.jsonc` files by hand.
-
-**OpenCode Providers Tool** makes managing existing providers effortless:
-
-* `[*]` **Add New Models** — Pull newly released models via **Smart add** or enter model IDs directly on any active provider without resetting it.
-* `[*]` **Remove Deprecated Models** — Delete obsolete models with one click while keeping your provider credentials intact.
-* `[*]` **Edit Existing Models** — Fine-tune token limits or model names in-place without re-entering API keys.
-* `[*]` **Zero Disconnects** — Your provider remains continuously connected and active in OpenCode's **Connected providers** screen.
+- `[*]` **Edit providers in-place** — add, remove, or modify models on any connected provider without disconnecting it
+- `[*]` **Smart Add** — query your provider's live `/models` endpoint and import models in bulk
+- `[*]` **Auto token limits** — context and output limits auto-populated via [models.dev](https://models.dev)
+- `[*]` **Comment-safe** — custom JSONC engine preserves all your `//` comments exactly where they are
+- `[*]` **Automatic backups** — `.bak` copy created before every save
+- `[*]` **Fully local** — zero telemetry, keys never leave your machine
 
 ---
 
 ### How It Works
 
-#### 1. Configure Providers & API Keys
+**1 · Add or select a provider** → configure API key, base URL, enable/disable toggle
 
-Add any provider (DeepSeek, OpenRouter, Groq, Ollama, Anthropic, or custom endpoints). Keys are masked by default with an instant reveal toggle, and blank fields never overwrite existing secrets.
-
-#### 2. Live Model Discovery
-
-Skip copying and pasting model IDs manually. Click **Smart add** to fetch the live model catalog directly from the provider's endpoint:
+**2 · Smart Add models** → fetches the live model catalog from `{baseURL}/models`
 
 <p align="center">
-  <img src="site/assets/smart-add.png" alt="Smart Add Live Models" width="680" />
+  <img src="site/assets/smart-add.png" alt="Smart Add" width="640" />
 </p>
 
-#### 3. Automatic Token Limits via models.dev
-
-OpenCode requires verified token limits for reliable operation. Context window and output limits are automatically populated via [models.dev](https://models.dev), with manual overrides when needed:
+**3 · Auto-sync limits** → token limits populated from models.dev with auto/manual control
 
 <p align="center">
-  <img src="site/assets/smart-model.png" alt="Smart Model Limits" width="500" />
+  <img src="site/assets/smart-model.png" alt="Smart Model Limits" width="480" />
 </p>
 
-#### 4. Connected in OpenCode
-
-Save your changes and launch OpenCode. Your configured providers immediately appear under OpenCode's native **Connected providers** screen:
+**4 · Connected in OpenCode** → save and your providers appear instantly
 
 <p align="center">
-  <img src="site/assets/opencode-connected-providers.jpg" alt="Connected Providers in OpenCode" width="760" />
+  <img src="site/assets/opencode-connected-providers.jpg" alt="Connected Providers" width="720" />
 </p>
 
 ---
 
-### Raw JSON vs. OpenCode Providers Tool
+### Comparison
 
-| Feature | Manual `.jsonc` Editing | OpenCode Providers Tool |
-| :--- | :--- | :--- |
-| **Updating Models on a Provider** | Disconnect provider or edit raw JSON | **Edit in-place:** add, edit, or remove models without disconnecting |
-| **Model Discovery** | Manual copy-paste of IDs | 1-Click live `/models` query |
-| **Token Limits** | Guessing or searching docs | Auto-populated from models.dev |
-| **Comment Safety** | Frequently wiped by JSON formatters | 100% preserved |
-| **Syntax Errors** | Trailing commas break OpenCode | Validated visual editor |
-| **Safety Backups** | Manual copy-pasting | Automatic `.bak` backup before every save |
+| | Hand-editing `.jsonc` | OpenCode Providers Tool |
+|:---|:---|:---|
+| **Editing existing providers** | Disconnect or risk raw JSON errors | Edit models in-place, zero disconnects |
+| **Adding models** | Copy-paste IDs one by one | 1-click live `/models` import |
+| **Token limits** | Guess or search docs | Auto-filled from models.dev |
+| **Comments** | Wiped by JSON formatters | 100% preserved |
+| **Backups** | Manual | Automatic `.bak` on every save |
 
 ---
 
 ### Privacy & Security
 
-* `[*]` **Local Execution** — Standalone .NET application that runs purely on your local machine.
-* `[*]` **No External Relays** — Network traffic is strictly limited to your configured provider endpoints and public `models.dev` lookups.
-* `[*]` **Antivirus Clean** — Verified **0/72 Clean** on [VirusTotal](https://www.virustotal.com/gui/file/965a31b4cc005e6f8f268b78e099f8ef7b6a13d29dc6c305e08daa67028e9bd1?nocache=1).
+- `[*]` Runs entirely on your local machine — no cloud backend
+- `[*]` API keys are only sent to your configured provider endpoints
+- `[*]` Verified **0/72 Clean** on [VirusTotal](https://www.virustotal.com/gui/file/965a31b4cc005e6f8f268b78e099f8ef7b6a13d29dc6c305e08daa67028e9bd1?nocache=1)
 
 ---
 
 ### Build from Source
-
-Requires [.NET SDK 8.0+](https://dotnet.microsoft.com/download):
 
 ```bash
 git clone https://github.com/uranrog-01/opencode_providers.git
@@ -132,9 +108,11 @@ cd opencode_providers/OpenCodeProvidersTool
 dotnet build -c Release -o ..\release
 ```
 
+Requires [.NET SDK 8.0+](https://dotnet.microsoft.com/download).
+
 ---
 
-### License
-
-Open source under the [MIT License](LICENSE). Created by **zer0ne**.  
-*Not affiliated with OpenCode. All configuration edits are performed locally.*
+<p align="center">
+  Open source under the <a href="LICENSE">MIT License</a>. Created by <b>zer0ne</b>.<br />
+  <sub>Not affiliated with OpenCode. All edits are performed locally on your machine.</sub>
+</p>
