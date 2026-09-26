@@ -96,7 +96,7 @@ OpenCode requires verified token limits for reliable operation. Context window a
 Save your changes and launch OpenCode. Your configured providers immediately appear under OpenCode's native **Connected providers** screen:
 
 <p align="center">
-  <img src="site/assets/opencode-connected-providers.png" alt="Connected Providers in OpenCode" width="760" />
+  <img src="site/assets/opencode-connected-providers.jpg" alt="Connected Providers in OpenCode" width="760" />
 </p>
 
 ---
