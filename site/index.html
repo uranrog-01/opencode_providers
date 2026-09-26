@@ -3,642 +3,877 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>OpenCode Providers Tool — providers, models and limits in one window</title>
+    <title>OpenCode Providers Tool — Easily Add Providers, API Keys & Models</title>
     <meta
       name="description"
-      content="A free, open-source Windows app for OpenCode: add providers, point them at a Base URL, add models, and keep token limits in sync with models.dev — without hand-editing opencode.json."
+      content="A modern, open-source Windows tool for OpenCode. Add providers and API keys in seconds, import models with 1-Click Smart Add, and auto-sync token limits via models.dev without touching raw JSON."
     />
+    <meta name="theme-color" content="#090a0f" />
     <link rel="icon" href="assets/favicon.ico" sizes="any" />
     <link rel="apple-touch-icon" href="assets/logo.png" />
-    <meta property="og:title" content="OpenCode Providers Tool" />
+    <link rel="canonical" href="https://uranrog-01.github.io/opencode_providers/" />
+
+    <!-- Open Graph & Social Cards -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="OpenCode Providers Tool — Easily Add Providers, API Keys & Models" />
     <meta
       property="og:description"
-      content="A free, open-source Windows app for OpenCode: providers, models and token limits, in one window."
+      content="Add AI providers and API keys in seconds, import models with 1-Click Smart Add, and keep token limits in sync with models.dev. Free, open source, single .exe."
     />
+    <meta property="og:url" content="https://uranrog-01.github.io/opencode_providers/" />
     <meta property="og:image" content="https://uranrog-01.github.io/opencode_providers/assets/app-window.png" />
-    <meta name="theme-color" content="#0b0b0c" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
-    <style>
-      :root {
-        --bg: #0b0b0c;
-        --bg-soft: #101011;
-        --card: #141416;
-        --line: #232326;
-        --line-hot: #34343a;
-        --text: #f1f0f0;
-        --dim: #a5a3a3;
-        --faint: #6e6c6c;
-        --accent: #4c8dff;
-        --ok: #34c759;
-        --sans: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
-        --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
-        --pad: clamp(20px, 5vw, 40px);
-        --max: 1180px;
-        --radius: 14px;
-      }
-      *,
-      *::before,
-      *::after {
-        box-sizing: border-box;
-      }
-      html {
-        scroll-behavior: smooth;
-      }
-      body {
-        margin: 0;
-        background: var(--bg);
-        color: var(--text);
-        font-family: var(--sans);
-        font-size: 17px;
-        line-height: 1.65;
-        -webkit-font-smoothing: antialiased;
-      }
-      a {
-        color: var(--text);
-        text-decoration: none;
-      }
-      img {
-        display: block;
-        max-width: 100%;
-      }
-      code,
-      pre {
-        font-family: var(--mono);
-      }
-      .wrap {
-        width: 100%;
-        max-width: var(--max);
-        margin: 0 auto;
-        padding: 0 var(--pad);
-      }
-
-      /* ------------------------------------------------------------------ header */
-      header {
-        position: sticky;
-        top: 0;
-        z-index: 20;
-        border-bottom: 1px solid var(--line);
-        background: rgba(11, 11, 12, 0.84);
-        backdrop-filter: blur(14px);
-      }
-      header .wrap {
-        display: flex;
-        align-items: center;
-        gap: 18px;
-        height: 62px;
-      }
-      .brand {
-        display: flex;
-        align-items: center;
-        gap: 11px;
-        font-weight: 600;
-        letter-spacing: -0.01em;
-      }
-      .brand img {
-        width: 26px;
-        height: 26px;
-        border-radius: 7px;
-      }
-      header nav {
-        margin-left: auto;
-        display: flex;
-        align-items: center;
-        gap: 26px;
-        font-family: var(--mono);
-        font-size: 13px;
-        color: var(--dim);
-      }
-      header nav a:hover {
-        color: var(--text);
-      }
-      @media (max-width: 780px) {
-        header nav a:not(.btn) {
-          display: none;
-        }
-      }
-
-      /* ----------------------------------------------------------------- buttons */
-      .btn {
-        display: inline-flex;
-        align-items: center;
-        gap: 9px;
-        padding: 11px 19px;
-        border: 1px solid var(--line-hot);
-        border-radius: 10px;
-        font-family: var(--mono);
-        font-size: 13.5px;
-        color: var(--text);
-        background: var(--card);
-        transition: border-color 0.15s ease, background 0.15s ease, transform 0.15s ease;
-        white-space: nowrap;
-      }
-      .btn:hover {
-        border-color: #4a4a52;
-        transform: translateY(-1px);
-      }
-      .btn--solid {
-        background: var(--text);
-        color: #141416;
-        border-color: var(--text);
-        font-weight: 500;
-      }
-      .btn--solid:hover {
-        background: #fff;
-      }
-
-      /* -------------------------------------------------------------------- hero */
-      .hero {
-        position: relative;
-        padding: clamp(64px, 9vw, 104px) 0 clamp(56px, 7vw, 88px);
-        text-align: center;
-        overflow: hidden;
-      }
-      .hero::before {
-        content: "";
-        position: absolute;
-        inset: -30% 0 auto;
-        height: 620px;
-        background: radial-gradient(52% 60% at 50% 42%, rgba(76, 141, 255, 0.15), transparent 70%);
-        pointer-events: none;
-      }
-      .eyebrow {
-        position: relative;
-        font-family: var(--mono);
-        font-size: 12.5px;
-        letter-spacing: 0.16em;
-        text-transform: uppercase;
-        color: var(--faint);
-      }
-      h1 {
-        position: relative;
-        margin: 20px auto 0;
-        max-width: 16ch;
-        font-size: clamp(38px, 6.4vw, 68px);
-        line-height: 1.05;
-        letter-spacing: -0.035em;
-        font-weight: 700;
-      }
-      .lede {
-        position: relative;
-        margin: 22px auto 0;
-        max-width: 62ch;
-        color: var(--dim);
-        font-size: clamp(17px, 2vw, 19.5px);
-      }
-      .cta {
-        position: relative;
-        display: flex;
-        flex-wrap: wrap;
-        gap: 12px;
-        justify-content: center;
-        margin-top: 32px;
-      }
-      .meta {
-        position: relative;
-        margin-top: 20px;
-        font-family: var(--mono);
-        font-size: 12.5px;
-        color: var(--faint);
-      }
-      .shot {
-        position: relative;
-        margin: clamp(40px, 6vw, 64px) 0 0;
-        border: 1px solid var(--line);
-        border-radius: var(--radius);
-        background: var(--card);
-        padding: 10px;
-        box-shadow: 0 40px 90px -40px rgba(0, 0, 0, 0.9);
-      }
-      .shot img {
-        border-radius: 8px;
-        width: 100%;
-      }
-
-      /* ---------------------------------------------------------------- sections */
-      section {
-        padding: clamp(64px, 8vw, 104px) 0;
-        border-top: 1px solid var(--line);
-      }
-      .kicker {
-        font-family: var(--mono);
-        font-size: 12.5px;
-        letter-spacing: 0.16em;
-        text-transform: uppercase;
-        color: var(--faint);
-      }
-      h2 {
-        margin: 14px 0 0;
-        font-size: clamp(27px, 3.6vw, 40px);
-        line-height: 1.15;
-        letter-spacing: -0.03em;
-        font-weight: 700;
-        max-width: 24ch;
-      }
-      section > .wrap > p {
-        color: var(--dim);
-        max-width: 70ch;
-        margin: 18px 0 0;
-      }
-
-      /* ------------------------------------------------------------------- steps */
-      .step {
-        display: grid;
-        grid-template-columns: minmax(0, 0.82fr) minmax(0, 1.18fr);
-        gap: clamp(24px, 4vw, 56px);
-        align-items: center;
-        margin-top: 56px;
-      }
-      .step--flip .step__text {
-        order: 2;
-      }
-      .step__n {
-        font-family: var(--mono);
-        font-size: 12.5px;
-        color: var(--faint);
-        margin: 0;
-      }
-      .step h3 {
-        margin: 10px 0 0;
-        font-size: clamp(20px, 2.4vw, 26px);
-        letter-spacing: -0.02em;
-        font-weight: 600;
-      }
-      .step p {
-        color: var(--dim);
-        margin: 12px 0 0;
-      }
-      .step__shot {
-        margin: 0;
-        border: 1px solid var(--line);
-        border-radius: var(--radius);
-        background: var(--card);
-        padding: 9px;
-      }
-      .step__shot img {
-        border-radius: 7px;
-        width: 100%;
-      }
-      .step__shot--tall img {
-        margin: 0 auto;
-        width: auto;
-        max-height: 470px;
-      }
-      @media (max-width: 880px) {
-        .step {
-          grid-template-columns: 1fr;
-        }
-        .step--flip .step__text {
-          order: 0;
-        }
-      }
-      .checks {
-        list-style: none;
-        margin: 18px 0 0;
-        padding: 0;
-        display: grid;
-        gap: 9px;
-        font-family: var(--mono);
-        font-size: 13.5px;
-        color: var(--dim);
-      }
-      .checks li::before {
-        content: "[*]";
-        color: var(--ok);
-        margin-right: 10px;
-      }
-
-      /* ------------------------------------------------------------------- cards */
-      .cards {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(285px, 1fr));
-        gap: 18px;
-        margin-top: 44px;
-      }
-      .card {
-        border: 1px solid var(--line);
-        border-radius: var(--radius);
-        background: var(--bg-soft);
-        padding: 22px;
-        overflow: hidden;
-        display: flex;
-        flex-direction: column;
-      }
-      .card h3 {
-        margin: 0;
-        font-size: 17px;
-        letter-spacing: -0.01em;
-        font-weight: 600;
-      }
-      .card p {
-        margin: 10px 0 0;
-        color: var(--dim);
-        font-size: 15px;
-      }
-      .card img {
-        margin: 20px -22px -22px;
-        width: calc(100% + 44px);
-        border-top: 1px solid var(--line);
-      }
-
-      /* -------------------------------------------------------------------- code */
-      pre {
-        margin: 22px 0 0;
-        padding: 18px 20px;
-        border: 1px solid var(--line);
-        border-radius: var(--radius);
-        background: var(--bg-soft);
-        overflow-x: auto;
-        font-size: 13.5px;
-        line-height: 1.75;
-        color: var(--text);
-      }
-      pre .c {
-        color: var(--faint);
-      }
-      pre .k {
-        color: var(--accent);
-      }
-
-      /* ------------------------------------------------------------------ footer */
-      footer {
-        border-top: 1px solid var(--line);
-        padding: 44px 0 64px;
-        color: var(--faint);
-        font-size: 14px;
-      }
-      footer .wrap {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 16px 28px;
-        align-items: center;
-      }
-      footer a:hover {
-        color: var(--text);
-      }
-      footer .spacer {
-        margin-left: auto;
-      }
-      .note {
-        font-family: var(--mono);
-        font-size: 12.5px;
-        color: var(--faint);
-      }
-    </style>
+    <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <header>
-      <div class="wrap">
-        <a class="brand" href="#top">
-          <img src="assets/logo.png" alt="" width="26" height="26" />
-          OpenCode Providers Tool
+    <a class="skip-link" href="#main">Skip to main content</a>
+
+    <!-- ================= Navigation ================= -->
+    <header class="nav" data-nav>
+      <div class="container nav__inner">
+        <a class="nav__brand" href="#top" aria-label="OpenCode Providers Tool Home">
+          <img src="assets/logo.png" alt="OpenCode Providers Logo" width="30" height="30" />
+          <span>OpenCode Providers</span>
         </a>
-        <nav>
-          <a href="#how">How it works</a>
-          <a href="#features">Features</a>
-          <a href="#install">Install</a>
-          <a class="btn" href="https://github.com/uranrog-01/opencode_providers/releases/latest">
-            Download for Windows
-          </a>
+
+        <nav class="nav__links" aria-label="Main Navigation">
+          <a href="#workflow">How It Works</a>
+          <a href="#providers">Add Providers</a>
+          <a href="#smart-add">Smart Add Models</a>
+          <a href="#limits">Token Limits</a>
+          <a href="#safety">Safety</a>
+          <a href="#faq">FAQ</a>
+          <a href="https://github.com/uranrog-01/opencode_providers" target="_blank" rel="noopener">GitHub</a>
         </nav>
+
+        <div class="nav__actions">
+          <a
+            class="btn btn--primary"
+            href="https://github.com/uranrog-01/opencode_providers/releases/latest"
+            id="nav-download-btn"
+          >
+            <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path
+                d="M8 1v9m0 0L4.5 6.5M8 10l3.5-3.5M2 12v1.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V12"
+                stroke="currentColor"
+                stroke-width="1.6"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+            Download v1.0.0
+          </a>
+          <button class="nav__toggle" data-nav-toggle aria-expanded="false" aria-label="Toggle navigation menu">
+            <svg width="22" height="22" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+              <path d="M3 6h14M3 10h14M3 14h14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+            </svg>
+          </button>
+        </div>
       </div>
     </header>
 
-    <main id="top">
-      <!-- ------------------------------------------------------------------ hero -->
-      <div class="hero">
-        <div class="wrap">
-          <p class="eyebrow">Free &amp; open source · MIT · Windows</p>
-          <h1>Your OpenCode providers, without the JSON.</h1>
-          <p class="lede">
-            Add a provider, point it at a Base URL, paste the key, add models. Limits come from models.dev and
-            stay in sync on every save — and the comments in your <code>opencode.jsonc</code> stay exactly
-            where you put them.
-          </p>
-          <div class="cta">
-            <a
-              class="btn btn--solid"
-              href="https://github.com/uranrog-01/opencode_providers/releases/latest"
-            >
-              ↓ Download OpenCodeProvidersTool.exe
-            </a>
-            <a class="btn" href="https://github.com/uranrog-01/opencode_providers">View source on GitHub</a>
-          </div>
-          <p class="meta">One file · no installer · no runtime to download · .NET Framework 4.8</p>
-
-          <figure class="shot">
-            <img
-              src="assets/app-window.png"
-              alt="The OpenCode Providers Tool window: a provider list on the left, and the selected provider's name, Base URL, API format, API key and models on the right."
-              width="1160"
-              height="760"
-            />
-          </figure>
+    <main id="main">
+      <!-- ================= Hero Section ================= -->
+      <section class="hero container" id="top">
+        <div class="hero__badge-wrap">
+          <span class="pill-badge">
+            <span class="status-dot"></span>
+            Version 1.0.0 · Standalone Windows Tool · MIT Licensed
+          </span>
         </div>
-      </div>
 
-      <!-- ------------------------------------------------------------------- how -->
-      <section id="how">
-        <div class="wrap">
-          <p class="kicker">How it works</p>
-          <h2>Four steps from nothing to a model OpenCode can use.</h2>
-          <p>
-            These are the real app, captured against a demo config — no mockups. Every step writes into your
-            <code>opencode.jsonc</code>, and nothing is saved until you press <strong>Save changes</strong>.
-          </p>
+        <h1 class="hero__title">
+          The Effortless Way to Configure <br />
+          <span class="hero__title-gradient">Providers, API Keys &amp; Models</span>
+        </h1>
 
-          <div class="step">
-            <div class="step__text">
-              <p class="step__n">01 — Name it</p>
-              <h3>Add a provider</h3>
-              <p>
-                <strong>Add provider</strong> asks for the provider id. That string becomes the key under
-                <code>"provider"</code> in the config, so it is the one thing worth getting right up front.
-              </p>
-            </div>
-            <figure class="step__shot step__shot--tall">
-              <img
-                src="assets/step-provider-id.png"
-                alt="The Add provider dialog asking for a Provider ID, with my-relay typed in."
-                width="470"
-                height="250"
+        <p class="hero__subtitle">
+          Stop manually editing fragile JSON files. Add your AI provider API keys in seconds, 
+          import complete model catalogs with <strong>1-Click Smart Add</strong>, and auto-sync 
+          token limits via <strong>models.dev</strong> with zero schema errors.
+        </p>
+
+        <div class="hero__cta-group">
+          <a
+            class="btn btn--primary btn--lg"
+            href="https://github.com/uranrog-01/opencode_providers/releases/latest/download/OpenCodeProvidersTool.exe"
+            id="hero-download-exe"
+          >
+            <svg width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path
+                d="M8 1v9m0 0L4.5 6.5M8 10l3.5-3.5M2 12v1.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V12"
+                stroke="currentColor"
+                stroke-width="1.6"
+                stroke-linecap="round"
+                stroke-linejoin="round"
               />
-            </figure>
+            </svg>
+            Download for Windows (~870 KB)
+          </a>
+
+          <a
+            class="btn btn--secondary btn--lg"
+            href="https://github.com/uranrog-01/opencode_providers"
+            target="_blank"
+            rel="noopener"
+            id="hero-view-github"
+          >
+            <svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+              <path
+                d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.4 7.4 0 0 1 2-.27c.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"
+              />
+            </svg>
+            View Source on GitHub
+          </a>
+        </div>
+
+        <!-- Install snippet bar -->
+        <div class="install-card" data-install>
+          <div class="install-tabs" role="tablist" aria-label="Terminal download methods">
+            <button class="install-tab" role="tab" aria-selected="true" data-tab="powershell">powershell</button>
+            <button class="install-tab" role="tab" aria-selected="false" data-tab="curl">curl</button>
+            <button class="install-tab" role="tab" aria-selected="false" data-tab="build">build</button>
           </div>
 
-          <div class="step step--flip">
-            <div class="step__text">
-              <p class="step__n">02 — Point it somewhere</p>
-              <h3>Fill in the URL and the key</h3>
-              <p>
-                Give it a display name, a <code>baseURL</code> and the API key. The API format is chosen from
-                the usual SDKs, and an OpenAI-compatible relay is the default. The key is masked on screen,
-                and a blank field never erases a key that is already saved.
-              </p>
-              <ul class="checks">
-                <li>name · baseURL · apiKey</li>
-                <li>blank field = leave the saved value alone</li>
-              </ul>
-            </div>
-            <figure class="step__shot">
-              <img
-                src="assets/step-provider-filled.png"
-                alt="The provider My Relay filled in, with Base URL https://api.myrelay.example/v1 and a masked API key."
-                width="1160"
-                height="760"
-              />
-            </figure>
+          <div class="install-body" data-panel="powershell">
+            <code class="install-code"><span class="token-kw">irm</span> https://github.com/uranrog-01/opencode_providers/releases/latest/download/OpenCodeProvidersTool.exe <span class="token-flag">-OutFile</span> OpenCodeProvidersTool.exe</code>
+            <button class="btn-copy" data-copy aria-label="Copy PowerShell command">copy</button>
           </div>
 
-          <div class="step">
-            <div class="step__text">
-              <p class="step__n">03 — Give it models</p>
-              <h3>Add a model</h3>
-              <p>
-                Add models by ID and give them a display name. Context window and max output are looked up on
-                models.dev as you type — each field is labelled <strong>auto</strong> or
-                <strong>manual</strong>, and the moment you edit one it stops following recommendations.
-              </p>
-              <ul class="checks">
-                <li>context and output are written together, as the schema requires</li>
-                <li>Reset form hands a field back to the recommendation</li>
-              </ul>
-            </div>
-            <figure class="step__shot step__shot--tall">
-              <img
-                src="assets/step-model.png"
-                alt="The Add model dialog with Model ID gpt-4o, context 128000, max output 16384 and display name GPT-4o via My Relay."
-                width="560"
-                height="496"
-              />
-            </figure>
+          <div class="install-body" data-panel="curl" style="display: none;">
+            <code class="install-code"><span class="token-kw">curl -L -o</span> OpenCodeProvidersTool.exe https://github.com/uranrog-01/opencode_providers/releases/latest/download/OpenCodeProvidersTool.exe</code>
+            <button class="btn-copy" data-copy aria-label="Copy curl command">copy</button>
           </div>
 
-          <div class="step step--flip">
-            <div class="step__text">
-              <p class="step__n">04 — Save</p>
-              <h3>One button, and it is live</h3>
-              <p>
-                <strong>Save changes</strong> writes the file: a <code>.bak</code> copy first, then 2-space
-                JSON with your comments put back where they were. OpenCode picks it up on its next start, and
-                the models you added are selectable.
-              </p>
-            </div>
-            <figure class="step__shot">
-              <img
-                src="assets/step-saved.png"
-                alt="The app after saving, showing My Relay with gpt-4o and gpt-4o-mini in the model list."
-                width="1160"
-                height="760"
-              />
-            </figure>
+          <div class="install-body" data-panel="build" style="display: none;">
+            <code class="install-code"><span class="token-kw">git clone</span> https://github.com/uranrog-01/opencode_providers &amp;&amp; <span class="token-kw">cd</span> opencode_providers/OpenCodeProvidersTool &amp;&amp; <span class="token-kw">dotnet build -c Release -o</span> ..\release</code>
+            <button class="btn-copy" data-copy aria-label="Copy build command">copy</button>
+          </div>
+        </div>
+
+        <!-- Hero Window Showcase -->
+        <div class="showcase-frame">
+          <div class="showcase-inner">
+            <video
+              src="assets/promo.mp4"
+              poster="assets/app-window.png"
+              width="1920"
+              height="1080"
+              autoplay
+              muted
+              loop
+              playsinline
+              aria-label="OpenCode Providers Tool in action: managing providers, setting keys, and adding models."
+            ></video>
           </div>
         </div>
       </section>
 
-      <!-- -------------------------------------------------------------- features -->
-      <section id="features">
-        <div class="wrap">
-          <p class="kicker">Features</p>
-          <h2>Built so it cannot lose your config.</h2>
-          <p>
-            The brief was “do not break the file”, and that shapes almost every decision in the editor.
-          </p>
+      <!-- ================= How It Works: The 3-Step Flow ================= -->
+      <section class="section section--alt" id="workflow">
+        <div class="container">
+          <div class="section-header">
+            <span class="section-eyebrow">Instant Setup</span>
+            <h2 class="section-title">From Zero to Configured in 30 Seconds</h2>
+            <p class="section-desc">
+              Setting up custom providers and model limits in OpenCode should not require digging through documentation 
+              or debugging malformed JSON syntax. Here is how simple it is:
+            </p>
+          </div>
 
-          <div class="cards">
-            <div class="card">
-              <h3>Smart configuration</h3>
-              <p>
-                Display name, context window and max output are looked up on models.dev by model ID, Base URL
-                host and API format — and refreshed on every save. A value you typed yourself is never
-                overwritten.
+          <div class="workflow-grid">
+            <!-- Step 1 -->
+            <div class="workflow-card">
+              <div class="workflow-step-num">1</div>
+              <h3 class="workflow-title">Add Provider &amp; API Key</h3>
+              <p class="workflow-text">
+                Select your provider or type a custom ID. Click <strong>Get API Key</strong> to open your provider's key management 
+                page directly, paste your secret with masked preview, and configure the Base URL.
               </p>
+              <div class="workflow-tags">
+                <span class="workflow-tag">Masked Key Input</span>
+                <span class="workflow-tag">Direct Token Links</span>
+                <span class="workflow-tag">BaseURL Detection</span>
+              </div>
+            </div>
+
+            <!-- Step 2 -->
+            <div class="workflow-card">
+              <div class="workflow-step-num">2</div>
+              <h3 class="workflow-title">1-Click Smart Add Models</h3>
+              <p class="workflow-text">
+                Hit <strong>Smart add</strong> next to the model list. The tool connects directly to your provider's 
+                <code>{baseURL}/models</code> endpoint and pulls every model it serves into an interactive checklist.
+              </p>
+              <div class="workflow-tags">
+                <span class="workflow-tag">Live Endpoint Query</span>
+                <span class="workflow-tag">Bulk Selection</span>
+                <span class="workflow-tag">Zero Typos</span>
+              </div>
+            </div>
+
+            <!-- Step 3 -->
+            <div class="workflow-card">
+              <div class="workflow-step-num">3</div>
+              <h3 class="workflow-title">Auto-Sync Limits &amp; Save</h3>
+              <p class="workflow-text">
+                Powered by <strong>models.dev</strong>, context windows and output limits are filled automatically. 
+                Keep what you want, override what you need, and save safely with an automatic <code>.bak</code> backup.
+              </p>
+              <div class="workflow-tags">
+                <span class="workflow-tag">models.dev Integration</span>
+                <span class="workflow-tag">Auto/Manual Flags</span>
+                <span class="workflow-tag">Instant Backup</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= Feature 1: Add Providers & API Key ================= -->
+      <section class="section" id="providers">
+        <div class="container">
+          <div class="feature-row">
+            <div class="feature-content">
+              <span class="section-eyebrow">Step 1 · Providers &amp; Credentials</span>
+              <h3>Effortless Provider &amp; API Key Management</h3>
+              <p>
+                Managing multiple AI vendors shouldn't be chaotic. The Providers panel gives you a clean visual overview 
+                of every configured provider, their active status, and credentials.
+              </p>
+              <ul class="feature-checklist">
+                <li>
+                  <svg class="feature-checklist-icon" width="18" height="18" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd"/>
+                  </svg>
+                  <span><strong>Direct "Get API Key" link:</strong> One click opens the exact portal where your API tokens are generated.</span>
+                </li>
+                <li>
+                  <svg class="feature-checklist-icon" width="18" height="18" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd"/>
+                  </svg>
+                  <span><strong>Secure masked input with reveal:</strong> Keeps secrets hidden from shoulder-surfing, with a reveal toggle for verification.</span>
+                </li>
+                <li>
+                  <svg class="feature-checklist-icon" width="18" height="18" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd"/>
+                  </svg>
+                  <span><strong>Never wipes keys by accident:</strong> Leaving the key box blank preserves your existing secret unchanged.</span>
+                </li>
+                <li>
+                  <svg class="feature-checklist-icon" width="18" height="18" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd"/>
+                  </svg>
+                  <span><strong>Instant Enable / Disable toggle:</strong> Cleanly toggles providers into OpenCode's <code>disabled_providers</code> array without deleting them.</span>
+                </li>
+              </ul>
+            </div>
+            <div class="feature-media">
               <img
-                src="assets/smart-model.png"
-                alt="The model editor with auto-labelled fields filled from models.dev."
+                src="assets/app-window.png"
+                alt="Main window showing the providers list, API key input, base URL, and model management."
+                width="840"
+                height="560"
                 loading="lazy"
               />
+              <div class="feature-media-caption">
+                <span>The Main Provider Editor</span>
+                <span>Configured · Status Dots · Masked Key</span>
+              </div>
             </div>
-            <div class="card">
-              <h3>Smart add</h3>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= Feature 2: Smart Add Models ================= -->
+      <section class="section section--alt" id="smart-add">
+        <div class="container">
+          <div class="feature-row feature-row--reverse">
+            <div class="feature-content">
+              <span class="section-eyebrow">Step 2 · 1-Click Import</span>
+              <h3>Smart Add: Read Models Directly from the Provider</h3>
               <p>
-                Reads the provider's own <code>{baseURL}/models</code> catalog, so a whole endpoint can be
-                added at once instead of one row at a time. models.dev fills in whatever the provider left
-                out.
+                Typing dozens of model IDs like <code>deepseek/deepseek-chat-v3</code> or <code>claude-3-7-sonnet-20250219</code> 
+                by hand is tedious and error-prone. <strong>Smart add</strong> connects directly to your provider's endpoint:
               </p>
+              <ul class="feature-checklist">
+                <li>
+                  <svg class="feature-checklist-icon" width="18" height="18" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd"/>
+                  </svg>
+                  <span><strong>Live <code>{baseURL}/models</code> query:</strong> Authenticates with your API key to discover all live models available on your account.</span>
+                </li>
+                <li>
+                  <svg class="feature-checklist-icon" width="18" height="18" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd"/>
+                  </svg>
+                  <span><strong>Clear status tags:</strong> Differentiates <span style="color:#38bdf8; font-weight:600">new</span> models from already <span style="color:#94a3b8">added</span> ones.</span>
+                </li>
+                <li>
+                  <svg class="feature-checklist-icon" width="18" height="18" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd"/>
+                  </svg>
+                  <span><strong>Bulk import with safety switches:</strong> Check all or select individually. Never overwrites custom manual limits unless explicitly requested.</span>
+                </li>
+                <li>
+                  <svg class="feature-checklist-icon" width="18" height="18" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd"/>
+                  </svg>
+                  <span><strong>Automatic models.dev fallback:</strong> If the provider endpoint is offline or private, models.dev provides the verified catalog.</span>
+                </li>
+              </ul>
+            </div>
+            <div class="feature-media">
               <img
                 src="assets/smart-add.png"
-                alt="The Smart add dialog listing a provider's models as a check list."
+                alt="Smart add dialog showing models pulled live from DeepSeek /v1/models endpoint with selection checkboxes."
+                width="720"
+                height="648"
                 loading="lazy"
               />
-            </div>
-            <div class="card">
-              <h3>Finds your setup</h3>
-              <p>
-                Checks <code>PATH</code>, npm, bun and pnpm global roots, scoop, chocolatey, winget,
-                <code>%LOCALAPPDATA%\Programs</code> and <code>C:\Program Files</code> — then opens the global
-                config for you.
-              </p>
-              <img
-                src="assets/about.png"
-                alt="The About dialog showing the detected OpenCode installation."
-                loading="lazy"
-              />
+              <div class="feature-media-caption">
+                <span>Smart Add Dialog</span>
+                <span>Live Endpoint · Bulk Select</span>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- --------------------------------------------------------------- install -->
-      <section id="install">
-        <div class="wrap">
-          <p class="kicker">Install</p>
-          <h2>Download one file and run it.</h2>
-          <p>
-            No installer, and nothing to put beside it. Windows 10 (1903+) and Windows 11 already ship the
-            runtime it needs.
-          </p>
-          <pre><span class="c"># grab the exe from the latest release, then double-click it</span>
-<span class="k">OpenCodeProvidersTool.exe</span>
-
-<span class="c"># or open a specific config instead of the global one</span>
-<span class="k">OpenCodeProvidersTool.exe</span> C:\path\to\opencode.jsonc</pre>
-          <p class="note">Every save writes a .bak copy of the previous file first.</p>
+      <!-- ================= Feature 3: Smart Configuration (Limits) ================= -->
+      <section class="section" id="limits">
+        <div class="container">
+          <div class="feature-row">
+            <div class="feature-content">
+              <span class="section-eyebrow">Step 3 · Token Limit Perfection</span>
+              <h3>No More Guessing Context Windows &amp; Limits</h3>
+              <p>
+                OpenCode strictly requires both <code>limit.context</code> and <code>limit.output</code>. If you specify one without 
+                the other, your config breaks. <strong>Smart configuration</strong> solves this completely:
+              </p>
+              <ul class="feature-checklist">
+                <li>
+                  <svg class="feature-checklist-icon" width="18" height="18" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd"/>
+                  </svg>
+                  <span><strong>Automatic lookup on models.dev:</strong> Context windows (e.g. 1M tokens) and max output limits (e.g. 64k) are auto-populated.</span>
+                </li>
+                <li>
+                  <svg class="feature-checklist-icon" width="18" height="18" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd"/>
+                  </svg>
+                  <span><strong>Per-field Auto vs Manual control:</strong> Edit only what you want to customize. Edited fields switch to <code>manual</code>; the others stay auto-synced.</span>
+                </li>
+                <li>
+                  <svg class="feature-checklist-icon" width="18" height="18" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd"/>
+                  </svg>
+                  <span><strong>Relay &amp; prefix matching:</strong> Recognizes relay model formats (such as <code>z-ai/glm-5.3-flash</code> or punctuation folding like <code>kimi.k3</code>).</span>
+                </li>
+                <li>
+                  <svg class="feature-checklist-icon" width="18" height="18" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd"/>
+                  </svg>
+                  <span><strong>One-click Reset:</strong> Press <strong>Reset form</strong> anytime to clear manual overrides and re-apply fresh recommendations.</span>
+                </li>
+              </ul>
+            </div>
+            <div class="feature-media">
+              <img
+                src="assets/smart-model.png"
+                alt="Model settings dialog with Smart configuration toggle, auto/manual labels, and token limits."
+                width="560"
+                height="496"
+                loading="lazy"
+              />
+              <div class="feature-media-caption">
+                <span>Model Settings Dialog</span>
+                <span>Context Window · Max Output · Auto/Manual</span>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
-      <!-- ----------------------------------------------------------- never touch -->
-      <section>
-        <div class="wrap">
-          <p class="kicker">What it never touches</p>
-          <h2>The edits stay in their lane.</h2>
-          <p>
-            Only the fields you actually change are written. Everything else — including keys this tool has
-            never heard of — survives a save exactly as it was.
-          </p>
-          <ul class="checks">
-            <li>$schema, plugin, and every unedited provider</li>
-            <li>modalities, variants, cost, and an extra limit.input</li>
-            <li>comments in a .jsonc file, put back where they were</li>
-            <li>disabled_providers entries that belong to no provider block</li>
-            <li>an enabled_providers whitelist, kept in step with the toggle</li>
-          </ul>
+      <!-- ================= Feature 4: Machine Discovery ================= -->
+      <section class="section section--alt">
+        <div class="container">
+          <div class="feature-row feature-row--reverse">
+            <div class="feature-content">
+              <span class="section-eyebrow">Zero Setup</span>
+              <h3>Finds Every Config on Your Machine Automatically</h3>
+              <p>
+                Don't waste time hunting for hidden AppData directories or roaming folders. 
+                On launch, the tool inspects your system and lists every valid OpenCode config file.
+              </p>
+              <ul class="feature-checklist">
+                <li>
+                  <svg class="feature-checklist-icon" width="18" height="18" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd"/>
+                  </svg>
+                  <span><strong>Detects installations:</strong> Finds OpenCode CLI, Electron Desktop, npm, bun, scoop, and winget installs.</span>
+                </li>
+                <li>
+                  <svg class="feature-checklist-icon" width="18" height="18" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd"/>
+                  </svg>
+                  <span><strong>Visual Config Switcher:</strong> Shows provider count, file kind, last modified time, and highlights the active global config.</span>
+                </li>
+                <li>
+                  <svg class="feature-checklist-icon" width="18" height="18" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd"/>
+                  </svg>
+                  <span><strong>Portable ready:</strong> Place it beside a portable config, or pass a specific config via command line: <code>OpenCodeProvidersTool.exe path\opencode.jsonc</code>.</span>
+                </li>
+              </ul>
+            </div>
+            <div class="feature-media">
+              <img
+                src="assets/config-picker.png"
+                alt="Open config dialog listing detected config files with provider counts, kind, and last modified timestamps."
+                width="728"
+                height="608"
+                loading="lazy"
+              />
+              <div class="feature-media-caption">
+                <span>Config Discovery Dialog</span>
+                <span>Global Config · Provider Counts · Timestamps</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= Comparison Table: Manual JSON vs Tool ================= -->
+      <section class="section">
+        <div class="container">
+          <div class="section-header">
+            <span class="section-eyebrow">Comparison</span>
+            <h2 class="section-title">Manual JSON vs. OpenCode Providers Tool</h2>
+            <p class="section-desc">
+              Why spend hours debugging configuration syntax when you can manage it with precision and speed?
+            </p>
+          </div>
+
+          <div class="comparison-card">
+            <table class="comparison-table">
+              <thead>
+                <tr>
+                  <th scope="col" style="width: 30%">Capability</th>
+                  <th scope="col" style="width: 35%">Hand-Editing <code>opencode.json</code></th>
+                  <th scope="col" class="col-highlight" style="width: 35%">OpenCode Providers Tool</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Adding Providers</strong></td>
+                  <td><span class="badge-bad">✕ Manual JSON syntax</span> (Risk of unescaped quotes)</td>
+                  <td class="col-highlight"><span class="badge-good">✓ 1-Click GUI</span> with direct "Get API Key" link</td>
+                </tr>
+                <tr>
+                  <td><strong>Importing Models</strong></td>
+                  <td><span class="badge-bad">✕ Tedious typing</span> row-by-row with model IDs</td>
+                  <td class="col-highlight"><span class="badge-good">✓ Smart add</span> reads live <code>/models</code> endpoint in 1-click</td>
+                </tr>
+                <tr>
+                  <td><strong>Token Limits</strong></td>
+                  <td><span class="badge-bad">✕ Manual research</span> (Schema breaks if context/output mismatched)</td>
+                  <td class="col-highlight"><span class="badge-good">✓ Auto-filled</span> via models.dev with auto/manual toggles</td>
+                </tr>
+                <tr>
+                  <td><strong>JSONC Comments</strong></td>
+                  <td><span class="badge-bad">✕ Wiped</span> by standard JSON parsers on save</td>
+                  <td class="col-highlight"><span class="badge-good">✓ Preserved 100%</span> in their original positions</td>
+                </tr>
+                <tr>
+                  <td><strong>Safety &amp; Backups</strong></td>
+                  <td><span class="badge-bad">✕ None</span> (One typo breaks OpenCode startup)</td>
+                  <td class="col-highlight"><span class="badge-good">✓ Automatic <code>.bak</code></span> written before every save</td>
+                </tr>
+                <tr>
+                  <td><strong>API Key Privacy</strong></td>
+                  <td><span class="badge-bad">✕ Plain text</span> visible on your code editor screen</td>
+                  <td class="col-highlight"><span class="badge-good">✓ Masked bullets</span> with secure reveal toggle</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= Safety & Reliability Grid ================= -->
+      <section class="section section--alt" id="safety">
+        <div class="container">
+          <div class="section-header">
+            <span class="section-eyebrow">Zero-Loss Guarantee</span>
+            <h2 class="section-title">Built with Obsessive Care for Your Config</h2>
+            <p class="section-desc">
+              Your config contains custom settings, plugins, and comments. The tool is engineered to touch only 
+              the fields you explicitly change, preserving everything else byte-for-byte.
+            </p>
+          </div>
+
+          <div class="safety-grid">
+            <div class="safety-card">
+              <div class="safety-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                </svg>
+              </div>
+              <h3 class="safety-title">Comments Always Survive</h3>
+              <p class="safety-body">
+                Newtonsoft JSON drops comments when serializing. We built a custom JSONC comment engine that extracts 
+                your comments and restores them in the exact same spot upon saving.
+              </p>
+            </div>
+
+            <div class="safety-card">
+              <div class="safety-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                </svg>
+              </div>
+              <h3 class="safety-title">Automatic .bak Backups</h3>
+              <p class="safety-body">
+                Before writing a single byte to disk, the tool duplicates your config to <code>&lt;filename&gt;.bak</code>. 
+                You can never lose a working configuration.
+              </p>
+            </div>
+
+            <div class="safety-card">
+              <div class="safety-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                </svg>
+              </div>
+              <h3 class="safety-title">100% Local &amp; Private</h3>
+              <p class="safety-body">
+                No telemetry, no tracking, and zero credentials ever leave your PC. models.dev is queried with public GETs, 
+                and your provider key is only sent directly to that provider's own Base URL.
+              </p>
+            </div>
+
+            <div class="safety-card">
+              <div class="safety-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="12" y1="8" x2="12" y2="12"></line>
+                  <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                </svg>
+              </div>
+              <h3 class="safety-title">Guaranteed Limit Pairs</h3>
+              <p class="safety-body">
+                OpenCode rejects configs with missing context or output limits. The editor requires both or neither, 
+                dropping incomplete limits rather than writing an invalid config.
+              </p>
+            </div>
+
+            <div class="safety-card">
+              <div class="safety-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                  <line x1="8" y1="21" x2="16" y2="21"></line>
+                  <line x1="12" y1="17" x2="12" y2="21"></line>
+                </svg>
+              </div>
+              <h3 class="safety-title">Single Standalone .EXE</h3>
+              <p class="safety-body">
+                Targets .NET Framework 4.8, already pre-installed on Windows 10 and 11. All dependencies (including Newtonsoft.Json) 
+                are embedded directly inside the 870 KB executable.
+              </p>
+            </div>
+
+            <div class="safety-card">
+              <div class="safety-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+              </div>
+              <h3 class="safety-title">Whitelist &amp; Custom Schema</h3>
+              <p class="safety-body">
+                Maintains <code>enabled_providers</code> and <code>disabled_providers</code> correctly. Custom keys like 
+                <code>modalities</code>, <code>cost</code>, or <code>plugin</code> are preserved untouched.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= FAQ Section ================= -->
+      <section class="section" id="faq">
+        <div class="container">
+          <div class="section-header">
+            <span class="section-eyebrow">Questions &amp; Answers</span>
+            <h2 class="section-title">Frequently Asked Questions</h2>
+          </div>
+
+          <div class="faq-wrap">
+            <details class="faq-item">
+              <summary class="faq-question">
+                <span>How does Smart Add read models from my provider?</span>
+                <svg class="faq-chevron" width="18" height="18" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+                </svg>
+              </summary>
+              <div class="faq-answer">
+                Smart Add strips any request suffix (like <code>/chat/completions</code>) from your provider's Base URL 
+                and issues a <code>GET {baseURL}/models</code> using your configured API key. It parses OpenAI-style 
+                <code>data[]</code>, Anthropic maps, or bare arrays and shows only models belonging to that provider.
+              </div>
+            </details>
+
+            <details class="faq-item">
+              <summary class="faq-question">
+                <span>How does Smart configuration look up token limits?</span>
+                <svg class="faq-chevron" width="18" height="18" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+                </svg>
+              </summary>
+              <div class="faq-answer">
+                It checks the local cache of <strong>models.dev</strong> by matching the model ID (including relay prefixes), 
+                Base URL host, and npm format. It prefers provider-specific limits (as relays often offer smaller limits than primary labs) 
+                and sets context length and output tokens automatically.
+              </div>
+            </details>
+
+            <details class="faq-item">
+              <summary class="faq-question">
+                <span>Will this tool overwrite my custom model limits?</span>
+                <svg class="faq-chevron" width="18" height="18" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+                </svg>
+              </summary>
+              <div class="faq-answer">
+                No. Any value you edit by hand is marked as <code>manual</code>. Smart sync will only fill fields that are empty 
+                or explicitly set to <code>auto</code>. During Smart Add, an "Overwrite limits that were set manually" switch appears 
+                and is unchecked by default.
+              </div>
+            </details>
+
+            <details class="faq-item">
+              <summary class="faq-question">
+                <span>Do I need to install anything before running the app?</span>
+                <svg class="faq-chevron" width="18" height="18" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+                </svg>
+              </summary>
+              <div class="faq-answer">
+                No installer or runtime is required. The app targets .NET Framework 4.8, which comes pre-installed on every 
+                Windows 10 (1903+) and Windows 11 machine. Double-click <code>OpenCodeProvidersTool.exe</code> and it runs immediately.
+              </div>
+            </details>
+
+            <details class="faq-item">
+              <summary class="faq-question">
+                <span>Can I open a config other than the global one?</span>
+                <svg class="faq-chevron" width="18" height="18" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+                </svg>
+              </summary>
+              <div class="faq-answer">
+                Yes. Click <strong>Open config…</strong> in the bottom toolbar to view and switch between all configs discovered 
+                on your computer, or pass a file path directly via terminal:
+                <pre style="margin-top: 0.5rem; padding: 0.5rem; background: rgba(0,0,0,0.3); border-radius: 4px;"><code>OpenCodeProvidersTool.exe "C:\path\to\opencode.jsonc"</code></pre>
+              </div>
+            </details>
+
+            <details class="faq-item">
+              <summary class="faq-question">
+                <span>Is this tool affiliated with OpenCode?</span>
+                <svg class="faq-chevron" width="18" height="18" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+                </svg>
+              </summary>
+              <div class="faq-answer">
+                No. It is an independent, free, open-source community tool created by <strong>zer0ne</strong> under the MIT license 
+                to make configuring OpenCode painless.
+              </div>
+            </details>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= CTA Section ================= -->
+      <section class="section">
+        <div class="container">
+          <div class="cta-banner">
+            <h2>Start Configuring Providers in Seconds</h2>
+            <p>
+              Download the single executable, point it at your OpenCode config, and enjoy fast, 
+              stress-free provider and model configuration.
+            </p>
+            <div class="hero__cta-group" style="margin-bottom: 0">
+              <a
+                class="btn btn--primary btn--lg"
+                href="https://github.com/uranrog-01/opencode_providers/releases/latest/download/OpenCodeProvidersTool.exe"
+                id="cta-download-btn"
+              >
+                <svg width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                  <path
+                    d="M8 1v9m0 0L4.5 6.5M8 10l3.5-3.5M2 12v1.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V12"
+                    stroke="currentColor"
+                    stroke-width="1.6"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+                Download v1.0.0 (.exe)
+              </a>
+              <a
+                class="btn btn--secondary btn--lg"
+                href="https://github.com/uranrog-01/opencode_providers"
+                target="_blank"
+                rel="noopener"
+                id="cta-github-btn"
+              >
+                Explore GitHub Repository
+              </a>
+            </div>
+          </div>
         </div>
       </section>
     </main>
 
-    <footer>
-      <div class="wrap">
-        <img src="assets/logo.png" alt="" width="22" height="22" />
-        <span>OpenCode Providers Tool — by zer0ne</span>
-        <a href="https://github.com/uranrog-01/opencode_providers/blob/main/LICENSE">MIT licensed</a>
-        <a href="https://github.com/uranrog-01/opencode_providers">Source</a>
-        <a class="spacer" href="https://github.com/uranrog-01/opencode_providers/releases/latest">Releases</a>
+    <!-- ================= Footer ================= -->
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-top">
+          <div class="nav__brand">
+            <img src="assets/logo.png" alt="Logo" width="24" height="24" />
+            <span>OpenCode Providers Tool</span>
+          </div>
+
+          <div class="footer-links">
+            <a href="https://github.com/uranrog-01/opencode_providers" target="_blank" rel="noopener">GitHub</a>
+            <a href="https://github.com/uranrog-01/opencode_providers/releases" target="_blank" rel="noopener">Releases</a>
+            <a href="https://github.com/uranrog-01/opencode_providers/blob/main/README.md" target="_blank" rel="noopener">Documentation</a>
+            <a href="https://github.com/uranrog-01/opencode_providers/blob/main/LICENSE" target="_blank" rel="noopener">MIT License</a>
+            <a href="https://models.dev" target="_blank" rel="noopener">models.dev</a>
+          </div>
+        </div>
+
+        <div class="footer-bottom">
+          <span>Created by zer0ne · Open source under MIT License</span>
+          <span>Not affiliated with OpenCode · All writes backed up to <code>.bak</code></span>
+        </div>
       </div>
     </footer>
+
+    <!-- ================= Scripts ================= -->
+    <script>
+      // ---------------------------------------------------------------------
+      // Mobile Navigation Toggle
+      // ---------------------------------------------------------------------
+      (function () {
+        var nav = document.querySelector("[data-nav]");
+        var toggle = document.querySelector("[data-nav-toggle]");
+        if (!nav || !toggle) return;
+
+        toggle.addEventListener("click", function () {
+          var open = nav.classList.toggle("nav--open");
+          toggle.setAttribute("aria-expanded", open ? "true" : "false");
+        });
+
+        nav.querySelectorAll(".nav__links a").forEach(function (link) {
+          link.addEventListener("click", function () {
+            nav.classList.remove("nav--open");
+            toggle.setAttribute("aria-expanded", "false");
+          });
+        });
+      })();
+
+      // ---------------------------------------------------------------------
+      // Install Tabs & Copy to Clipboard
+      // ---------------------------------------------------------------------
+      (function () {
+        var install = document.querySelector("[data-install]");
+        if (!install) return;
+
+        var tabs = install.querySelectorAll(".install-tab");
+        var panels = install.querySelectorAll(".install-body");
+
+        function select(name) {
+          tabs.forEach(function (tab) {
+            tab.setAttribute("aria-selected", tab.dataset.tab === name ? "true" : "false");
+          });
+          panels.forEach(function (panel) {
+            panel.style.display = panel.dataset.panel === name ? "flex" : "none";
+          });
+        }
+
+        tabs.forEach(function (tab) {
+          tab.addEventListener("click", function () {
+            select(tab.dataset.tab);
+          });
+        });
+
+        function fallbackCopy(text) {
+          var area = document.createElement("textarea");
+          area.value = text;
+          area.setAttribute("readonly", "");
+          area.style.position = "fixed";
+          area.style.top = "-9999px";
+          document.body.appendChild(area);
+          area.select();
+          var ok = false;
+          try {
+            ok = document.execCommand("copy");
+          } catch (e) {
+            ok = false;
+          }
+          document.body.removeChild(area);
+          return ok;
+        }
+
+        panels.forEach(function (panel) {
+          var button = panel.querySelector("[data-copy]");
+          if (!button) return;
+
+          button.addEventListener("click", function () {
+            var code = panel.querySelector(".install-code");
+            var text = code ? code.textContent.replace(/\s+/g, " ").trim() : "";
+
+            var notifyDone = function () {
+              button.textContent = "copied!";
+              button.dataset.copied = "true";
+              setTimeout(function () {
+                button.textContent = "copy";
+                delete button.dataset.copied;
+              }, 1600);
+            };
+
+            if (navigator.clipboard && window.isSecureContext) {
+              navigator.clipboard.writeText(text).then(notifyDone, function () {
+                if (fallbackCopy(text)) notifyDone();
+              });
+              return;
+            }
+
+            if (fallbackCopy(text)) notifyDone();
+          });
+        });
+      })();
+
+      // ---------------------------------------------------------------------
+      // Reduced Motion Check
+      // ---------------------------------------------------------------------
+      (function () {
+        var video = document.querySelector(".showcase-inner video");
+        if (!video) return;
+        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+          video.removeAttribute("autoplay");
+          video.pause();
+          video.controls = true;
+        }
+      })();
+    </script>
   </body>
 </html>

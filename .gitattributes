@@ -1,0 +1,25 @@
+# Auto-detect text files and normalize line endings
+* text=auto
+
+# Windows specific sources
+*.cs text eol=crlf
+*.csproj text eol=crlf
+*.ps1 text eol=crlf
+
+# Web & documentation
+*.html text eol=lf
+*.css text eol=lf
+*.js text eol=lf
+*.md text eol=lf
+*.json text eol=lf
+*.jsonc text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.py text eol=lf
+
+# Binaries
+*.exe binary
+*.dll binary
+*.png binary
+*.ico binary
+*.mp4 binary
