@@ -7,6 +7,7 @@
 <h1 align="center">OpenCode Providers Tool</h1>
 
 <p align="center">A fast, visual provider and model editor for <a href="https://opencode.ai">OpenCode</a>.</p>
+<p align="center"><b>Add, edit, or remove models on existing providers without ever disconnecting them.</b></p>
 
 <p align="center">
   <a href="https://github.com/uranrog-01/opencode_providers/releases"><img alt="Release" src="https://img.shields.io/github/v/release/uranrog-01/opencode_providers?style=flat-square&color=3b82f6" /></a>
@@ -46,6 +47,7 @@ irm https://github.com/uranrog-01/opencode_providers/releases/latest/download/Op
 
 **OpenCode Providers Tool** is an open-source visual manager for [OpenCode](https://opencode.ai) configuration. Instead of manually editing fragile `.jsonc` files by hand, it lets you configure providers, add API keys, and discover live models in seconds.
 
+* `[*]` **In-Place Provider Editing** — Add, remove, or edit models on any existing provider without disconnecting or re-authenticating it in OpenCode.
 * `[*]` **1-Click Live Discovery** — Query `{baseURL}/models` directly with your API key to fetch and import models in bulk.
 * `[*]` **models.dev Limits Auto-Sync** — Automatically populates accurate context window (`limit.context`) and output limits (`limit.output`).
 * `[*]` **Comment & Structure Preservation** — Safe `.jsonc` engine ensures your handwritten comments and formatting never get wiped.
@@ -54,12 +56,27 @@ irm https://github.com/uranrog-01/opencode_providers/releases/latest/download/Op
 
 ---
 
+### Edit Providers Without Disconnecting
+
+In OpenCode's native settings, modifying an already connected provider is frustrating. Adding a newly released model, pruning deprecated models, or adjusting token limits normally forces you to disconnect the provider completely or edit complex `.jsonc` files by hand.
+
+**OpenCode Providers Tool** makes managing existing providers effortless:
+
+* `[*]` **Add New Models** — Pull newly released models via **Smart add** or enter model IDs directly on any active provider without resetting it.
+* `[*]` **Remove Deprecated Models** — Delete obsolete models with one click while keeping your provider credentials intact.
+* `[*]` **Edit Existing Models** — Fine-tune token limits or model names in-place without re-entering API keys.
+* `[*]` **Zero Disconnects** — Your provider remains continuously connected and active in OpenCode's **Connected providers** screen.
+
+---
+
 ### How It Works
 
 #### 1. Configure Providers & API Keys
+
 Add any provider (DeepSeek, OpenRouter, Groq, Ollama, Anthropic, or custom endpoints). Keys are masked by default with an instant reveal toggle, and blank fields never overwrite existing secrets.
 
 #### 2. Live Model Discovery
+
 Skip copying and pasting model IDs manually. Click **Smart add** to fetch the live model catalog directly from the provider's endpoint:
 
 <p align="center">
@@ -67,6 +84,7 @@ Skip copying and pasting model IDs manually. Click **Smart add** to fetch the li
 </p>
 
 #### 3. Automatic Token Limits via models.dev
+
 OpenCode requires verified token limits for reliable operation. Context window and output limits are automatically populated via [models.dev](https://models.dev), with manual overrides when needed:
 
 <p align="center">
@@ -74,6 +92,7 @@ OpenCode requires verified token limits for reliable operation. Context window a
 </p>
 
 #### 4. Connected in OpenCode
+
 Save your changes and launch OpenCode. Your configured providers immediately appear under OpenCode's native **Connected providers** screen:
 
 <p align="center">
@@ -86,6 +105,7 @@ Save your changes and launch OpenCode. Your configured providers immediately app
 
 | Feature | Manual `.jsonc` Editing | OpenCode Providers Tool |
 | :--- | :--- | :--- |
+| **Updating Models on a Provider** | Disconnect provider or edit raw JSON | **Edit in-place:** add, edit, or remove models without disconnecting |
 | **Model Discovery** | Manual copy-paste of IDs | 1-Click live `/models` query |
 | **Token Limits** | Guessing or searching docs | Auto-populated from models.dev |
 | **Comment Safety** | Frequently wiped by JSON formatters | 100% preserved |

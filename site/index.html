@@ -46,7 +46,7 @@
 
         <nav class="nav__links" aria-label="Main Navigation">
           <a href="#workflow">How It Works</a>
-          <a href="#providers">Add Providers</a>
+          <a href="#providers">Add &amp; Edit Providers</a>
           <a href="#smart-add">Smart Add Models</a>
           <a href="#limits">Token Limits</a>
           <a href="#safety">Safety</a>
@@ -105,9 +105,9 @@
         </h1>
 
         <p class="hero__subtitle">
-          Stop manually editing fragile JSON files. Add your AI provider API keys in seconds, 
-          import complete model catalogs with <strong>1-Click Smart Add</strong>, and auto-sync 
-          token limits via <strong>models.dev</strong> with zero schema errors.
+          Stop manually editing fragile JSON files. Easily add and edit providers, manage API keys, 
+          and <strong>add, remove, or edit models on the same provider without disconnecting it</strong>. 
+          Import models with 1-Click Smart Add and auto-sync token limits via <strong>models.dev</strong>.
         </p>
 
         <div class="hero__cta-group">
@@ -202,15 +202,16 @@
             <!-- Step 1 -->
             <div class="workflow-card">
               <div class="workflow-step-num">1</div>
-              <h3 class="workflow-title">Add Provider &amp; API Key</h3>
+              <h3 class="workflow-title">Add &amp; Edit Providers In-Place</h3>
               <p class="workflow-text">
-                Select your provider or type a custom ID. Click <strong>Get API Key</strong> to open your provider's key management 
-                page directly, paste your secret with masked preview, and configure the Base URL.
+                Add new providers or select an existing one to add, remove, or edit models without disconnecting 
+                the provider in OpenCode. Click <strong>Get API Key</strong> to open your provider's dashboard directly, 
+                paste keys with masked preview, and save.
               </p>
               <div class="workflow-tags">
+                <span class="workflow-tag">Zero Disconnects</span>
                 <span class="workflow-tag">Masked Key Input</span>
-                <span class="workflow-tag">Direct Token Links</span>
-                <span class="workflow-tag">BaseURL Detection</span>
+                <span class="workflow-tag">In-Place Editing</span>
               </div>
             </div>
 
@@ -253,12 +254,19 @@
           <div class="feature-row">
             <div class="feature-content">
               <span class="section-eyebrow">Step 1 · Providers &amp; Credentials</span>
-              <h3>Effortless Provider &amp; API Key Management</h3>
+              <h3>Effortless Provider &amp; Model Management — Zero Disconnects</h3>
               <p>
-                Managing multiple AI vendors shouldn't be chaotic. The Providers panel gives you a clean visual overview 
-                of every configured provider, their active status, and credentials.
+                Managing multiple AI vendors shouldn't force you to start from scratch. The Providers panel gives you 
+                complete in-place control: edit any existing provider to add newly released models, delete obsolete ones, 
+                or update keys without ever removing or disconnecting the provider in OpenCode.
               </p>
               <ul class="feature-checklist">
+                <li>
+                  <svg class="feature-checklist-icon" width="18" height="18" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd"/>
+                  </svg>
+                  <span><strong>In-place model management:</strong> Add, remove, or edit models directly on the same provider without disconnecting it or resetting your OpenCode session.</span>
+                </li>
                 <li>
                   <svg class="feature-checklist-icon" width="18" height="18" viewBox="0 0 20 20" fill="currentColor">
                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd"/>
@@ -489,6 +497,12 @@
                   <svg class="feature-checklist-icon" width="18" height="18" viewBox="0 0 20 20" fill="currentColor">
                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd"/>
                   </svg>
+                  <span><strong>Zero disconnects needed:</strong> Update or expand models on existing providers anytime; they remain active and connected in OpenCode.</span>
+                </li>
+                <li>
+                  <svg class="feature-checklist-icon" width="18" height="18" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd"/>
+                  </svg>
                   <span><strong>Live model availability:</strong> All imported models appear ready for prompt sessions and coding in OpenCode.</span>
                 </li>
               </ul>
@@ -535,6 +549,11 @@
                   <td><strong>Adding Providers</strong></td>
                   <td><span class="badge-bad">✕ Manual JSON syntax</span> (Risk of unescaped quotes)</td>
                   <td class="col-highlight"><span class="badge-good">✓ 1-Click GUI</span> with direct "Get API Key" link</td>
+                </tr>
+                <tr>
+                  <td><strong>Modifying Existing Providers</strong></td>
+                  <td><span class="badge-bad">✕ Disconnect &amp; reconnect</span> or hand-edit raw JSON</td>
+                  <td class="col-highlight"><span class="badge-good">✓ In-place editing</span>: Add, remove, or edit models without disconnecting</td>
                 </tr>
                 <tr>
                   <td><strong>Importing Models</strong></td>
@@ -674,6 +693,18 @@
           </div>
 
           <div class="faq-wrap">
+            <details class="faq-item">
+              <summary class="faq-question">
+                <span>Can I add, remove, or edit models on an existing provider without disconnecting it?</span>
+                <svg class="faq-chevron" width="18" height="18" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+                </svg>
+              </summary>
+              <div class="faq-answer">
+                Yes! That is one of the primary problems this tool solves. In OpenCode, modifying models on an already configured provider normally requires disconnecting the provider or risking errors by manually editing <code>opencode.jsonc</code>. With OpenCode Providers Tool, you simply select any existing provider in the list, use <strong>Smart add</strong> or the model editor to add new models, delete obsolete ones, or modify token limits, and click Save changes. The provider remains active and connected in OpenCode at all times.
+              </div>
+            </details>
+
             <details class="faq-item">
               <summary class="faq-question">
                 <span>How does Smart Add read models from my provider?</span>
